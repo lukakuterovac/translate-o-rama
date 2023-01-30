@@ -15,7 +15,7 @@
     {% for field in form.visible_fields %}
         <div class=" row g-2 align-items-center">
             <div class="col-6 mx-auto">
-                <label class="col-form-label">{{ field.label_tag }}</label>
+                <label class="col-form-label mt-2">{{ field.label_tag }}</label>
 
                 {% if form.is_bound %}
                     {% if field.errors %}
