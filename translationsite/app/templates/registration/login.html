@@ -1,0 +1,23 @@
+{% extends 'app/base.html' %}
+{% block content %}
+ 
+<h1 class="text-center">Login</h1>
+
+<form method="post">
+    {% csrf_token %}
+    
+    {% include 'includes/bs_form.html' with form=form %}
+   
+    <div class="row ms-5">
+        <div clss="col-md-8 mx-auto">
+            <div class="ms-5">
+                <div class="ms-5">
+                    <input type="submit" value="Login" class="btn btn-light ms-5">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+{% endblock %}
