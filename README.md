@@ -245,10 +245,10 @@ information:
 ##### 3.1.1.5 User Profile
 
 **Req U5** - The web application will provide a profile for users to view
-their account information.
+and edit their account information.
 
-The web application will provide a profile for users to view their account
-information. The profile will include the following information:
+The web application will provide a profile for users to view and edit their 
+account information. The profile will include the following information:
 
 - User's name
 - User's email address
@@ -256,6 +256,8 @@ information. The profile will include the following information:
 - User's accepted jobs
 - User's completed jobs
 
+The user will be able to change their email address or their password on this 
+page.
 
 ##### 3.1.1.6 Job Posting
 
