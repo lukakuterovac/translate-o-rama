@@ -1,14 +1,23 @@
 {% extends 'app/base.html' %}
+
 {% block content %}
 <div class="container">
   <div class="row">
-    <div class="row">
-      <h2>Sign up</h2>
+    <div class="col-md-12">
+      <h2 class="text-center">Sign up</h2>
     </div>
     <form method="post" accept-charset="utf-8">
       {% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" value="Sign up" class="btn btn-primary">
+
+      {% include 'includes/bs4_form.html' with form=form %}
+      
+      <div class="row">
+        <div class="col-md-8 mx-auto">
+          <input type="submit" value="Sign up" class="btn btn-primary">
+          <a href="{% url 'home_path' %}" class="btn btn-default">Cancel</a>
+        </div>
+      </div>
+
     </form>
   </div>
 </div>        
