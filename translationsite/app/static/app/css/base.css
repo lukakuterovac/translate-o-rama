@@ -1,0 +1,25 @@
+body{
+    background-color:#fffffe;
+}
+
+h1{
+    color: #094067;
+}
+
+p{
+    color:#46505C;
+}
+
+nav{
+    background-color: #90b4ce;
+    color: #2A3139;
+}
+
+.nav-link{
+    font-size:18px !important;
+}
+
+.jumbotron-container{
+    background-image:url("../images/background2.jpg");
+    background-size: cover;
+}
