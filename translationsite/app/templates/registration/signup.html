@@ -1,0 +1,15 @@
+{% extends 'app/base.html' %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="row">
+      <h2>Sign up</h2>
+    </div>
+    <form method="post" accept-charset="utf-8">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Sign up" class="btn btn-primary">
+    </form>
+  </div>
+</div>        
+{% endblock content %}
