@@ -21,3 +21,50 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
+
+
+class Job(models.Model):
+    class JobField(models.Model):
+        ART = "A"
+        BUSINESS = "B"
+        COMPUTERS = "C"
+        EDUCATION = "ED"
+        ENGINEERING = "ENG"
+        FINANCE = "F"
+        LAW = "L"
+        LITERATURE = "LIT"
+        MEDICINE = "M"
+        SCIENCE = "SC"
+        SOCIALSCI = "SS"
+        TECHNOLOGY = "TECH"
+
+        JOB_CHOICES = [
+            (ART, "Art"),
+            (BUSINESS, "Business"),
+            (COMPUTERS, "Computers"),
+            (EDUCATION, "Education"),
+            (ENGINEERING, "Engineering"),
+            (FINANCE, "Finance"),
+            (LAW, "Law"),
+            (LITERATURE, "Literature"),
+            (MEDICINE, "Medicine"),
+            (SCIENCE, "Science"),
+            (SOCIALSCI, "Social Sciences"),
+            (TECHNOLOGY, "Technology"),
+        ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.TextField(blank=False)
+    description = models.TextField(blank=False)
+    source_language = models.TextField(blank=False)
+    target_language = models.TextField(blank=False)
+    job_field = models.CharField(
+        max_length=4,
+        choices=JobField.JOB_CHOICES,
+        default=JobField.LITERATURE,
+    )
+    budget = models.DecimalField(max_digits=10, decimal_places=2)
+    text = models.TextField(blank=False)
+
+    def __str__(self):
+        return f"{self.id}-{self.title[:30]}-{self.description[:100]}-{self.source_language[:15]}-{self.target_language[:15]}-{self.job_field}-{self.budget}-{self.text}"

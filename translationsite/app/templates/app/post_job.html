@@ -1,0 +1,10 @@
+{% extends 'app/base.html' %}
+{% block content %}
+    <form action="{% url 'app:post_job' %}" method="post">
+        {% csrf_token %}
+        <div class="row">
+            {{ form }}
+        </div>
+        <input type="submit" value="Post">
+    </form>
+{% endblock content %}
