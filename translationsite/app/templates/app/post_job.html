@@ -1,49 +1,10 @@
 {% extends 'app/base.html' %}
 {% block content %}
-
-    <h1>POST A JOB</h1>
-
-    <form method="post">
+    <form action="{% url 'app:post_job' %}" method="post">
         {% csrf_token %}
-        <p>
-            <lable>Title:</label>
-            <input type="text" name="title"/>
-        </p>
-
-        <p>
-            <label>Description:</label>
-            <input type="text" name="description"/>
-        </p>
-
-        <p>
-            <label>Source language:</label>
-            <input type="text" name="source_lang"/>
-        </p>
-
-        <p>
-            <label>Target language:</label>
-            <input type="text" name="target_lang"/>
-        </p>
-
-        <p>
-            <label>Job field:</label>
-            <input type="text" name="job_field"/>
-        </p>
-
-        <p>
-            <label>Budget:</label>
-            <input type="text" name="budget"/>
-        </p>
-
-        <p>
-            <label>The text to be translated:</label>
-            <input type="text" name="text"/>
-        </p>
-
-        <p>
-            <input type="submit" value="Post"/>
-        </p>
+        <div class="row">
+            {{ form }}
+        </div>
+        <input type="submit" value="Post">
     </form>
-        
-        
 {% endblock content %}
