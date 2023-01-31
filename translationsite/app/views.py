@@ -19,6 +19,8 @@ def dashboard(request):
 
 
 def post_job(request):
+
+    form = JobForm(initial={"job_field": "ART"})
     if request.method == "POST":
         form = JobForm(request.POST)
         if form.is_valid():
