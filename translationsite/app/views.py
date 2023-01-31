@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 
 
@@ -8,6 +8,8 @@ def home(request):
 
 
 def dashboard(request):
-    if request.user.is_superuser:
-        return HttpResponseRedirect("", "")
-    return HttpResponse("/")
+    user = request.user
+    context = {
+        "user": user,
+    }
+    return render(request, "app/dashboard.html", context)

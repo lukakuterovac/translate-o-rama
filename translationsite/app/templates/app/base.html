@@ -39,7 +39,7 @@
                   <a class="nav-link" href="{% url 'logout' %}"> Signout</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#"> My jobs | {{user.username}}</a>
+                  <a class="nav-link" href="{% url 'app:dashboard' %}"> My jobs | {{user.username}}</a>
                 </li>
               {% else %}
                 <li class="nav-item">
