@@ -252,7 +252,6 @@ account information. The profile will include the following information:
 
 - User's name
 - User's email address
-- User's rating
 - User's accepted jobs
 - User's completed jobs
 
@@ -422,6 +421,8 @@ translators will include the following information:
 - A list of submitted bids
 - A list of assigned jobs
 - A list of completed jobs
+- Translators's rating
+
 
 ##### 3.1.2.3 Translator Profile
 
@@ -436,6 +437,7 @@ translators will include the following information:
 - A list of submitted bids
 - A list of assigned jobs
 - A list of completed jobs
+- Translators's rating
 
 
 ##### 3.1.2.4 Job Bidding
