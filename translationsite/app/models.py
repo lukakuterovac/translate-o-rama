@@ -63,7 +63,7 @@ class Job(models.Model):
         choices=JobField.JOB_CHOICES,
         default=JobField.LITERATURE,
     )
-    budget = models.DecimalField(max_digits=10, decimal_places=2)
+    budget = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     text = models.TextField(blank=False)
 
     def __str__(self):
