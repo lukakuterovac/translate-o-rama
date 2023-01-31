@@ -6,7 +6,7 @@ from django.dispatch import receiver
 # Create your models here.
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    token_balance = models.FloatField(default=0.0)
+    token_balance = models.DecimalField(default=0.0, max_digits=5, decimal_places=2)
 
     def __str__(self) -> str:
         return f"{self.user.username}: {self.token_balance}"
