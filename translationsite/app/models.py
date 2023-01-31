@@ -67,4 +67,4 @@ class Job(models.Model):
     text = models.TextField(blank=False)
 
     def __str__(self):
-        return f"{self.id}-{self.title[:30]}-{self.description[:100]}-{self.source_language[:15]}-{self.target_language[:15]}-{self.field}-{self.budget}-{self.text}"
+        return f"{self.id}-{self.title[:30]}-{self.description[:100]}-{self.source_language[:15]}-{self.target_language[:15]}-{self.job_field}-{self.budget}-{self.text}"
