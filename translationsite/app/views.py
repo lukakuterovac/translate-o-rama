@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from .models import Job
+from .models import Job, JobField
+from .forms import *
 
 
 def home(request):
@@ -18,6 +19,8 @@ def dashboard(request):
 
 
 def post_job(request):
+
+    form = JobForm(initial={"job_field": "ART"})
     if request.method == "POST":
         job_post = Job.objects.create(
             user=request.user,
@@ -25,9 +28,8 @@ def post_job(request):
             description=request.POST["description"],
             source_language=request.POST["source_lang"],
             target_language=request.POST["target_lang"],
-            job_field=request.POST["job_field"],
             budget=request.POST["budget"],
             text=request.POST["text"],
         )
         return HttpResponseRedirect(reverse("app:post_job", args=[]))
-    return render(request, "app/post_job.html", {})
+    return render(request, "app/post_job.html", {"FORM": form})
