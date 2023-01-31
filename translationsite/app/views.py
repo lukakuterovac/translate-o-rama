@@ -13,3 +13,11 @@ def dashboard(request):
         "user": user,
     }
     return render(request, "app/dashboard.html", context)
+
+
+def profile(request):
+    user = request.user
+    context = {
+        "user": user,
+    }
+    return render(request, "app/profile.html", context)

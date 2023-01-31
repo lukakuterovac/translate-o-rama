@@ -1,0 +1,38 @@
+{% extends 'app/base.html' %}
+{% block content %}
+ 
+    <h1 class="text-center">User profile</h1>
+
+    <p>Username: {{ user.username }}</p>
+
+    <p>Email address: {{ user.email }}</p>
+
+    <p>Accepted jobs:</p>
+
+    <p>Completed jobs:</p>
+
+    <p>Change email or password:</p>
+    <div>
+        <form action="{% url 'app:change_email' user.id %}" method="post">
+            {% csrf_token %}
+             <p>
+                 <label for="new_email">Change email:</label></p><br>
+                 <input type="text" name="email" id="new_email" value="">
+             </p>
+            
+             <input type="submit" value="Change your email">
+         </form>  
+    </div>
+    <div>
+        <form action="{% url 'app:change_password' user.id %}" method="post">
+            {% csrf_token %}
+            <p>
+                <label for="new_password">Komentar</label></p><br>
+                <input type="text" name="password" id="new_password" value="">
+            </p>
+
+            <input type="submit" value="Change password">
+        </form>
+    </div>
+
+{% endblock %}
