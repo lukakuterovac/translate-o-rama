@@ -58,7 +58,7 @@ class JobField(models.Model):
 class Job(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.TextField(blank=False)
+    title = models.TextField(blank=False, unique=True)
     description = models.TextField(blank=False)
     source_language = models.TextField(blank=False)
     target_language = models.TextField(blank=False)

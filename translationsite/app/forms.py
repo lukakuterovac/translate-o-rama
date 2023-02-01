@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 from .models import Job
+from django import forms
 
 
 class JobForm(ModelForm):
@@ -15,6 +16,16 @@ class JobForm(ModelForm):
             "budget",
             "text",
         ]
+
+        widgets = {
+            "title": forms.TextInput(attrs={"class": "form-control"}),
+            "description": forms.TextInput(attrs={"class": "form-control"}),
+            "source_language": forms.TextInput(attrs={"class": "form-control"}),
+            "target_language": forms.TextInput(attrs={"class": "form-control"}),
+            "job_field": forms.Select(attrs={"class": "form-control"}),
+            "budget": forms.TextInput(attrs={"class": "form-control"}),
+            "text": forms.Textarea(attrs={"class": "form-control"}),
+        }
 
     def clean(self):
         errors = []
@@ -37,6 +48,16 @@ class JobForm(ModelForm):
                 errors.append(ValidationError("Budget must be greater than 0!"))
         else:
             errors.append(ValidationError("Budget field empty"))
+
+        if "title" in self.cleaned_data:
+
+            if Job.objects.get(title=self.cleaned_data["title"]):
+
+                errors.append(ValidationError("A job with this title already exists."))
+
+        else:
+            errors.append(ValidationError("Title fields empty"))
+
         if errors:
             raise ValidationError(errors)
         return self.cleaned_data
