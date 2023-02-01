@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django import forms
 from django.forms import ModelForm
+import datetime
 
 # Create your models here.
 class UserProfile(models.Model):
@@ -82,7 +83,7 @@ class Message(models.Model):
         User, on_delete=models.CASCADE, related_name="to_user_message_set"
     )
     text = models.TextField()
-    send_date = models.DateTimeField("Sent at")
+    send_date = models.DateTimeField(default=datetime.datetime.now)
 
     def __str__(self) -> str:
         return f"{self.from_user.username}->{self.to_user.username}: {self.text}"

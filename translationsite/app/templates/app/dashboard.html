@@ -33,7 +33,7 @@
   <div class="mb-4">
     {% for message in messages %}
       <div class="row">
-        <p>{{ message.from_user }}: {{ message.text }}</p>
+        <p>{{ message.from_user }}: {{ message.text }} {{ message.send_date }}</p>
       </div>
     {% empty %}
       <div class="row">

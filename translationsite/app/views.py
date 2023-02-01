@@ -14,7 +14,7 @@ def home(request):
 def dashboard(request):
     user = request.user
     jobs = Job.objects.filter(user=user)
-    messages = Message.objects.filter(to_user=user)
+    messages = Message.objects.filter(to_user=user).order_by("send_date").reverse()
     context = {
         "user": user,
         "jobs": jobs,
