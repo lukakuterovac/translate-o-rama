@@ -1,7 +1,23 @@
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
-from .models import Job
+from .models import Job, UserProfile
 from django import forms
+
+
+class UserProfileForm(ModelForm):
+    is_translator = forms.BooleanField()
+
+    class Meta:
+        model = UserProfile
+        fields = [
+            "token_balance",
+            "is_translator",
+        ]
+
+        widgets = {
+            "token_balance": forms.NumberInput(attrs={"class": "form-control"}),
+            "is_translator": forms.CheckboxInput(attrs={"class": "form-control"}),
+        }
 
 
 class JobForm(ModelForm):

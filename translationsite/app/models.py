@@ -9,6 +9,7 @@ from django.forms import ModelForm
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     token_balance = models.FloatField(default=0.0)
+    is_translator = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"{self.user.username}: {self.token_balance}"
