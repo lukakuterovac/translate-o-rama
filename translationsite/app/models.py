@@ -72,3 +72,17 @@ class Job(models.Model):
 
     def __str__(self):
         return f"{self.id}-{self.title[:30]}-{self.description[:100]}-{self.source_language[:15]}-{self.target_language[:15]}-{self.job_field}-{self.budget}-{self.text}"
+
+
+class Message(models.Model):
+    from_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="from_user_message_set"
+    )
+    to_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="to_user_message_set"
+    )
+    text = models.TextField()
+    send_date = models.DateTimeField("Sent at")
+
+    def __str__(self) -> str:
+        return f"{self.from_user.username}->{self.to_user.username}: {self.text}"

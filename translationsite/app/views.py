@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from .models import Job
+from .models import Job, Message
 from .forms import JobForm
+from django.contrib.auth.models import User
 
 
 def home(request):
@@ -13,9 +14,11 @@ def home(request):
 def dashboard(request):
     user = request.user
     jobs = Job.objects.filter(user=user)
+    messages = Message.objects.filter(to_user=user)
     context = {
         "user": user,
         "jobs": jobs,
+        "messages": messages,
     }
     return render(request, "app/dashboard.html", context)
 
