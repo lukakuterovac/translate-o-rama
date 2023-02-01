@@ -3,16 +3,26 @@
 {% block content %}
   <div class="row">
     <div class="col-md-12">
-      <h2 class="text-center">Dashboard</h2>
+      <h1 class="text-center">Dashboard</h1>
     </div>
   </div>
   <div class="row">
-    <h3>Username: {{ user.username }}</h3>
+    <p>Username: {{ user.username }}</p>
   </div>
   <div class="row">
-    <h3>E-mail: {{ user.email }}</h3>
+    <p>E-mail: {{ user.email }}</p>
   </div>
   <div class="row">
-    <h3>Token balance: {{ user.userprofile.token_balance }} token(s)</h3>
+    <p>Token balance: {{ user.userprofile.token_balance }} token(s)</p>
   </div>
+  <div class="row">
+    <h2 class="text-center">Jobs</h2>
+  </div>
+  {% for job in jobs %}
+    {% include 'includes/job_card.html' with job=job %}
+  {% empty %}
+    <div class="row">
+      No jobs posted.
+    </div>
+  {% endfor %}
 {% endblock content %}

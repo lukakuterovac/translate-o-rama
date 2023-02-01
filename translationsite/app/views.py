@@ -12,8 +12,10 @@ def home(request):
 
 def dashboard(request):
     user = request.user
+    jobs = Job.objects.filter(user=user)
     context = {
         "user": user,
+        "jobs": jobs,
     }
     return render(request, "app/dashboard.html", context)
 
