@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from .models import Job
-from .forms import JobForm, SetEmailForm, EmailChangeForm
+from .forms import JobForm, EmailChangeForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -36,7 +36,6 @@ def profile(request):
     return render(request, "app/profile.html", context)
 
 
-# sa stacka
 @login_required()
 def email_change(request):
     user = request.user
@@ -56,16 +55,13 @@ def email_change(request):
 
             return HttpResponseRedirect(reverse("app:profile", args=[]))
         else:
-            context = {
-                "user": user,
-                "email_form": form,
-                "password_form": password_form,
-            }
-            return HttpResponseRedirect(request, "app/profile.html", context)
+            context = {"user": user, "email_form": form, "password_form": password_form}
+            return render(request, "app/profile.html", context)
     else:
+
         return render(
             request,
-            "email_change.html",
+            "app/profile.html",
             {"email_form": form},
             context_instance=RequestContext(request),
         )
@@ -105,27 +101,3 @@ def post_job(request):
         return HttpResponseRedirect(reverse("app:post_job", args=[]))
     context = {"form": JobForm()}
     return render(request, "app/post_job.html", context)
-
-
-def change_email(request):
-    if request.method == "POST":
-        user = request.user
-        email_form = SetEmailForm(instance=user)
-        if email_form.is_valid():
-            email_form.save()
-            context = {
-                "user": user,
-                "email_form": email_form,
-                "password_form": password_form,
-            }
-            messages.success(request, "Your email has been changed")
-            return HttpResponseRedirect(request, "app/profile.html", context)
-    else:
-        email_form = SetEmailForm(instance=request.user)
-        password_form = SetPasswordForm(request.user)
-        context = {
-            "user": user,
-            "email_form": email_form,
-            "password_form": password_form,
-        }
-    return HttpResponseRedirect(request, "app/profile.html", context)

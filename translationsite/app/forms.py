@@ -26,14 +26,6 @@ class SetPasswordForm(SetPasswordForm):
         fields = ["new_password1", "new_password2"]
 
 
-class SetEmailForm(UserChangeForm):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-control"}))
-
-    class Meta:
-        model = User
-        fields = ["email"]
-
-
 class EmailChangeForm(forms.Form):
     """
     A form that lets a user change set their email while checking for a change in the
