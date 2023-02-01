@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django import forms
+from django.forms import ModelForm
 
 # Create your models here.
 class UserProfile(models.Model):
@@ -23,38 +25,40 @@ def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
 
 
-class Job(models.Model):
-    class JobField(models.Model):
-        ART = "A"
-        BUSINESS = "B"
-        COMPUTERS = "C"
-        EDUCATION = "ED"
-        ENGINEERING = "ENG"
-        FINANCE = "F"
-        LAW = "L"
-        LITERATURE = "LIT"
-        MEDICINE = "M"
-        SCIENCE = "SC"
-        SOCIALSCI = "SS"
-        TECHNOLOGY = "TECH"
+class JobField(models.Model):
+    ART = "A"
+    BUSINESS = "B"
+    COMPUTERS = "C"
+    EDUCATION = "ED"
+    ENGINEERING = "ENG"
+    FINANCE = "F"
+    LAW = "L"
+    LITERATURE = "LIT"
+    MEDICINE = "M"
+    SCIENCE = "SC"
+    SOCIALSCI = "SS"
+    TECHNOLOGY = "TECH"
 
-        JOB_CHOICES = [
-            (ART, "Art"),
-            (BUSINESS, "Business"),
-            (COMPUTERS, "Computers"),
-            (EDUCATION, "Education"),
-            (ENGINEERING, "Engineering"),
-            (FINANCE, "Finance"),
-            (LAW, "Law"),
-            (LITERATURE, "Literature"),
-            (MEDICINE, "Medicine"),
-            (SCIENCE, "Science"),
-            (SOCIALSCI, "Social Sciences"),
-            (TECHNOLOGY, "Technology"),
-        ]
+    JOB_CHOICES = [
+        (ART, "Art"),
+        (BUSINESS, "Business"),
+        (COMPUTERS, "Computers"),
+        (EDUCATION, "Education"),
+        (ENGINEERING, "Engineering"),
+        (FINANCE, "Finance"),
+        (LAW, "Law"),
+        (LITERATURE, "Literature"),
+        (MEDICINE, "Medicine"),
+        (SCIENCE, "Science"),
+        (SOCIALSCI, "Social Sciences"),
+        (TECHNOLOGY, "Technology"),
+    ]
+
+
+class Job(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.TextField(blank=False)
+    title = models.TextField(blank=False, unique=True)
     description = models.TextField(blank=False)
     source_language = models.TextField(blank=False)
     target_language = models.TextField(blank=False)
@@ -63,7 +67,7 @@ class Job(models.Model):
         choices=JobField.JOB_CHOICES,
         default=JobField.LITERATURE,
     )
-    budget = models.DecimalField(max_digits=10, decimal_places=2)
+    budget = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     text = models.TextField(blank=False)
 
     def __str__(self):

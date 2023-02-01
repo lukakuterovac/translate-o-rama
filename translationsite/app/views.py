@@ -87,17 +87,29 @@ def change_password(request):
 
 
 def post_job(request):
+
+    form = JobForm(initial={"job_field": "ART"})
     if request.method == "POST":
-        job_post = Job.objects.create(
-            user=request.user,
-            title=request.POST["title"],
-            description=request.POST["description"],
-            source_language=request.POST["source_language"],
-            target_language=request.POST["target_language"],
-            job_field=request.POST["job_field"],
-            budget=request.POST["budget"],
-            text=request.POST["text"],
-        )
-        return HttpResponseRedirect(reverse("app:post_job", args=[]))
-    context = {"form": JobForm()}
-    return render(request, "app/post_job.html", context)
+        form = JobForm(request.POST)
+        if form.is_valid():
+            job_post = Job.objects.create(
+                user=request.user,
+                title=form.cleaned_data.get("title"),
+                description=form.cleaned_data.get("description"),
+                source_language=form.cleaned_data.get("source_language"),
+                target_language=form.cleaned_data.get("target_language"),
+                job_field=form.cleaned_data.get("job_field"),
+                budget=form.cleaned_data.get("budget"),
+                text=form.cleaned_data.get("text"),
+            )
+            return HttpResponseRedirect(reverse("app:post_job", args=[]))
+        else:
+            errors = []
+            for k, v in form.errors.items():
+                errors.append(v)
+            return render(
+                request, "app/post_job.html", {"form": form, "errors": errors}
+            )
+    else:
+        form = JobForm()
+    return render(request, "app/post_job.html", {"form": form})

@@ -1,10 +1,17 @@
 {% extends 'app/base.html' %}
+{% load widget_tweaks %}
+
 {% block content %}
     <form action="{% url 'app:post_job' %}" method="post">
+        <div class="form-group">
         {% csrf_token %}
-        <div class="row">
-            {{ form }}
+        {% include 'includes/job_form.html' with form=form %}
+
+        <div class="row mt-4 text-center mb-5">
+            <div clss="col-md-8 ms-2">
+                <input type="submit" value="Post" class="custom-btn btn px-4 py-2">
+            </div>
         </div>
-        <input type="submit" value="Post">
+        </div>
     </form>
 {% endblock content %}

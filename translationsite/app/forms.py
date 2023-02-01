@@ -3,6 +3,7 @@ from .models import Job, UserProfile
 from django.contrib.auth.forms import SetPasswordForm, UserChangeForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django import forms
 
 
@@ -18,6 +19,50 @@ class JobForm(ModelForm):
             "budget",
             "text",
         ]
+        widgets = {
+            "title": forms.TextInput(attrs={"class": "form-control"}),
+            "description": forms.TextInput(attrs={"class": "form-control"}),
+            "source_language": forms.TextInput(attrs={"class": "form-control"}),
+            "target_language": forms.TextInput(attrs={"class": "form-control"}),
+            "job_field": forms.Select(attrs={"class": "form-control"}),
+            "budget": forms.TextInput(attrs={"class": "form-control"}),
+            "text": forms.Textarea(attrs={"class": "form-control"}),
+        }
+
+    def clean(self):
+        errors = []
+        if (
+            "source_language" in self.cleaned_data
+            and "target_language" in self.cleaned_data
+        ):
+            if (
+                self.cleaned_data["source_language"].lower()
+                == self.cleaned_data["target_language"].lower()
+            ):
+                errors.append(
+                    ValidationError("Source and target language must be different!")
+                )
+        else:
+            errors.append(ValidationError("Language fields empty"))
+
+        if "budget" in self.cleaned_data:
+            if self.cleaned_data["budget"] <= 0:
+                errors.append(ValidationError("Budget must be greater than 0!"))
+        else:
+            errors.append(ValidationError("Budget field empty"))
+
+        if "title" in self.cleaned_data:
+
+            if Job.objects.get(title=self.cleaned_data["title"]):
+
+                errors.append(ValidationError("A job with this title already exists."))
+
+        else:
+            errors.append(ValidationError("Title fields empty"))
+
+        if errors:
+            raise ValidationError(errors)
+        return self.cleaned_data
 
 
 class SetPasswordForm(SetPasswordForm):

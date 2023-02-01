@@ -23,3 +23,12 @@ nav {
     background-image: url("../images/background2.jpg");
     background-size: cover;
 }
+
+.custom-btn {
+    background-color: #3da9fc;
+    color: #fffffe;
+}
+
+.logo {
+    max-height: 35px;
+}
