@@ -11,28 +11,21 @@
 
     <p>Completed jobs:</p>
 
-    <p>Change email or password:</p>
     <div>
-        <form action="{% url 'app:change_email' user.id %}" method="post">
+        <form action="{% url 'app:new_email' %}" method="post">
             {% csrf_token %}
              <p>
-                 <label for="new_email">Change email:</label></p><br>
-                 <input type="text" name="email" id="new_email" value="">
+                 <label for="change_email">Change email:</label></p><br>
+                 <input type="text" name="email" id="change_email" value="">
              </p>
             
              <input type="submit" value="Change your email">
          </form>  
     </div>
     <div>
-        <form action="{% url 'app:change_password' user.id %}" method="post">
-            {% csrf_token %}
-            <p>
-                <label for="new_password">Komentar</label></p><br>
-                <input type="text" name="password" id="new_password" value="">
-            </p>
-
-            <input type="submit" value="Change password">
-        </form>
+        {% block password_new %}
+            {% include 'app/password_change.html' with form=form %}
+        {% endblock%}
     </div>
 
 {% endblock %}

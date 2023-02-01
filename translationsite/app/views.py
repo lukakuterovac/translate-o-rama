@@ -3,6 +3,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from .models import Job
 from .forms import JobForm
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.shortcuts import redirect
+from .forms import SetPasswordForm
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -20,10 +25,37 @@ def dashboard(request):
 
 def profile(request):
     user = request.user
-    context = {
-        "user": user,
-    }
+    form = SetPasswordForm(user)
+    context = {"user": user, "form": form}
     return render(request, "app/profile.html", context)
+
+
+def change_email(request):
+    if request.method == "POST":
+        user = request.user
+        email = request.POST["email"]
+        user.email = email
+        return HttpResponseRedirect(reverse("app:profile", args=[]))
+    return render(request, "app/profile.html", {})
+
+
+def change_password(request):
+    user = request.user
+    if request.method == "POST":
+        form = SetPasswordForm(user, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your password has been changed")
+            return redirect("login")
+        else:
+            for error in list(form.errors.values()):
+                messages.error(request, error)
+        context = {"user": user, "form": form}
+        return HttpResponseRedirect(request, "app/profile.html", context)
+    else:
+        form = SetPasswordForm(user)
+        context = {"user": user, "form": form}
+        return render(request, "app/profile.html", context)
 
 
 def post_job(request):
