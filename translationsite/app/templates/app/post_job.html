@@ -6,58 +6,58 @@
         {% csrf_token %}
 
             <div class='form-group mt-3 mb-5 d-flex justify-content-center'>
-                <label class='control-label col-md-1 col-md-offset-2'>Title</label>
+                <label class='control-label col-md-1 col-md-offset-2'>Title:</label>
                 <div class='col-md-6'>
                     {% render_field form.title   class='form-control' rows="1" cols="1" type='text' %}
                 </div>
             </div>
 
             <div class='form-group mt-3 mb-5 d-flex justify-content-center'>
-                <label class='control-label col-md-1 col-md-offset-2'>Description</label>
+                <label class='control-label col-md-1 col-md-offset-2'>Description:</label>
                 <div class='col-md-6'>
                     {% render_field form.description  class='form-control' rows="1" cols="1" type='text' %}
                 </div>
             </div>
 
             <div class='form-group mt-3 mb-5 d-flex justify-content-center'>
-                <label class='control-label col-md-1 col-md-offset-2'>Source language</label>
+                <label class='control-label col-md-1 col-md-offset-2'>Source language:</label>
                 <div class='col-md-6'>
                     {% render_field form.source_language  class='form-control' rows="1" cols="1" type='text' %}
                 </div>
             </div>
 
             <div class='form-group mt-3 mb-5 d-flex justify-content-center'>
-                <label class='control-label col-md-1 col-md-offset-2'>Target language</label>
+                <label class='control-label col-md-1 col-md-offset-2'>Target language:</label>
                 <div class='col-md-6'>
                     {% render_field form.target_language  class='form-control' rows="1" cols="1" type='text' %}
                 </div>
             </div>
 
             <div class='form-group mt-3 mb-5 d-flex justify-content-center'>
-                <label class='control-label  col-md-1 col-md-offset-2'>Job field</label>
+                <label class='control-label  col-md-1 col-md-offset-2'>Job field:</label>
                 <div class='col-md-6'>
                     {% render_field form.job_field  class='form-control' rows="1" cols="1" type='CharField' %}
                 </div>
             </div>
 
             <div class='form-group mt-3 mb-5 d-flex justify-content-center'>
-                <label class='control-label  col-md-1 col-md-offset-2'>Budget</label>
+                <label class='control-label  col-md-1 col-md-offset-2'>Budget:</label>
                 <div class='col-md-6'>
                     {% render_field form.budget class='form-control' rows="1" cols="1" type='text' %}
                 </div>
             </div>
 
             <div class='form-group mt-3 mb-5 d-flex justify-content-center'>
-                <label class='control-label col-md-1 col-md-offset-2'>Text to be translated</label>
+                <label class='control-label col-md-1 col-md-offset-2'>Text to be translated:</label>
                 <div class='col-md-6'>
-                    {% render_field form.text  class='form-control' rows="1" cols="1" type='text' %}
+                    {% render_field form.text  class='form-control' rows="4" cols="1" type='text' %}
                 </div>
             </div>
 
 
-            <div class="row mt-4 text-center">
+            <div class="row mt-4 text-center mb-5">
                 <div clss="col-md-8 ms-2">
-                    <input type="submit" value="Post" class="btn btn-primary px-4 py-2">
+                    <input type="submit" value="Post" class="custom-btn btn px-4 py-2">
                 </div>
             </div>
     </form>

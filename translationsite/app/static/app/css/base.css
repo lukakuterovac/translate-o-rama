@@ -1,25 +1,34 @@
-body{
-    background-color:#fffffe;
+body {
+    background-color: #fffffe;
 }
 
-h1{
+h1 {
     color: #094067;
 }
 
-p{
-    color:#46505C;
+p {
+    color: #46505C;
 }
 
-nav{
+nav {
     background-color: #90b4ce;
     color: #2A3139;
 }
 
-.nav-link{
-    font-size:18px !important;
+.nav-link {
+    font-size: 18px !important;
 }
 
-.jumbotron-container{
-    background-image:url("../images/background2.jpg");
+.jumbotron-container {
+    background-image: url("../images/background2.jpg");
     background-size: cover;
+}
+
+.custom-btn {
+    background-color: #3da9fc;
+    color: #fffffe;
+}
+
+.logo {
+    max-height: 35px;
 }
