@@ -7,22 +7,24 @@
     </div>
   </div>
   <div class="row">
-    <p>Username: {{ user.username }}</p>
+    <h4>Username: {{ user.username }}</h4>
   </div>
   <div class="row">
-    <p>E-mail: {{ user.email }}</p>
+    <h4>E-mail: {{ user.email }}</h4>
   </div>
   <div class="row">
-    <p>Token balance: {{ user.userprofile.token_balance }} token(s)</p>
+    <h4>Token balance: {{ user.userprofile.token_balance }} token(s)</h4>
   </div>
   <div class="row">
     <h2 class="text-center">Jobs</h2>
   </div>
-  {% for job in jobs %}
-    {% include 'includes/job_card.html' with job=job %}
-  {% empty %}
-    <div class="row">
-      No jobs posted.
-    </div>
-  {% endfor %}
+  <div class="mb-4">
+    {% for job in jobs %}
+      {% include 'includes/job_card.html' with job=job %}
+    {% empty %}
+      <div class="row">
+        No jobs posted.
+      </div>
+    {% endfor %}
+  </div>
 {% endblock content %}
