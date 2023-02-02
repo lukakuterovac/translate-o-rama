@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from .models import Job
 from .forms import JobForm, EmailChangeForm
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -9,6 +8,8 @@ from django.shortcuts import redirect
 from .forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
+from .models import Job, Message
+from .forms import JobForm
 
 
 def home(request):
@@ -18,8 +19,12 @@ def home(request):
 
 def dashboard(request):
     user = request.user
+    jobs = Job.objects.filter(user=user)
+    messages = Message.objects.filter(to_user=user).order_by("send_date").reverse()
     context = {
         "user": user,
+        "jobs": jobs,
+        "messages": messages,
     }
     return render(request, "app/dashboard.html", context)
 
