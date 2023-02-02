@@ -129,7 +129,12 @@ class EmailChangeForm(forms.Form):
 class JobBidForm(ModelForm):
     class Meta:
         model = JobBid
-        fields = ["bid"]
+        fields = [
+            "bid",
+        ]
+        widgets = {
+            "bid": forms.TextInput(attrs={"class": "form-control"}),
+        }
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user", None)
