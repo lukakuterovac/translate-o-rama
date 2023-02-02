@@ -130,3 +130,17 @@ def jobs(request):
         "jobs": jobs,
     }
     return render(request, "app/jobs.html", context)
+
+
+def job_bid(request):
+    user = request.user
+    jobs = Job.objects.all().filter(~Q(user=user), Q(is_assigned=False))
+    context = {
+        "user": user,
+        "jobs": jobs,
+    }
+    return HttpResponseRedirect(request, "app/jobs.html", context)
+
+
+def job_message(request):
+    pass
