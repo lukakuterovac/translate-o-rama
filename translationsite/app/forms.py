@@ -51,7 +51,7 @@ class JobForm(ModelForm):
 
         if "title" in self.cleaned_data:
 
-            if Job.objects.get(title=self.cleaned_data["title"]):
+            if Job.objects.filter(title=self.cleaned_data["title"]):
 
                 errors.append(ValidationError("A job with this title already exists."))
 

@@ -71,6 +71,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "translationsite.wsgi.application"
+ASGI_APPLICATION = "ChatApp.asgi.application"
 
 
 # Database
