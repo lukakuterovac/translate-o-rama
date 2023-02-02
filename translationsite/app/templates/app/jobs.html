@@ -4,18 +4,15 @@
     <div class="form-group">
     {% csrf_token %}
     
-
-    <div class="row mt-4 text-center mb-5">
-        <div clss="col-md-8 ms-2">
-            <input type="submit" value="Bid" class="custom-btn btn px-4 py-2">
-        </div>
-    </div>
-    <div class="row mt-4 text-center mb-5">
-        <div clss="col-md-8 ms-2">
-            <input type="button" value="Message" class="custom-btn btn px-4 py-2">
-        </div>
-    </div>
-
+    <div class="mb-4">
+        {% for job in jobs %}
+          {% include 'includes/unassigned_jobs.html' with job=job %}
+        {% empty %}
+          <div class="row">
+            No jobs posted.
+          </div>
+        {% endfor %}
+      </div>
     </div>
 </form>
 {% endblock content %}

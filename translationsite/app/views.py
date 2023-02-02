@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from .models import Job, Message
 from .forms import JobForm
+from django.db.models import Q
 
 
 def home(request):
@@ -121,5 +122,11 @@ def post_job(request):
 
 
 def jobs(request):
-    context = {}
+    user = request.user
+    jobs = Job.objects.all().filter(~Q(user=user), Q(is_assigned=False))
+
+    context = {
+        "user": user,
+        "jobs": jobs,
+    }
     return render(request, "app/jobs.html", context)

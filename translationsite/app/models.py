@@ -70,6 +70,8 @@ class Job(models.Model):
     )
     budget = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     text = models.TextField(blank=False)
+    is_assigned = models.BooleanField(default=False)
+    is_completed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.id}-{self.title[:30]}-{self.description[:100]}-{self.source_language[:15]}-{self.target_language[:15]}-{self.job_field}-{self.budget}-{self.text}"
