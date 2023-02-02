@@ -90,3 +90,9 @@ class Message(models.Model):
 
     def __str__(self) -> str:
         return f"{self.from_user.username}->{self.to_user.username}: {self.text}"
+
+
+class JobBid(models.Model):
+    bid_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bider")
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    bid = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)

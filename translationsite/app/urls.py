@@ -12,5 +12,4 @@ urlpatterns = [
     path("profile/email_change", views.email_change, name="new_email"),
     path("jobs", views.jobs, name="jobs"),
     path("jobs/job_bid", views.job_bid, name="jobs_bid"),
-    path("jobs/message", views.job_message, name="jobs_message"),
 ]
