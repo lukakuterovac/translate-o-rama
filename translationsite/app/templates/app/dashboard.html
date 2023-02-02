@@ -32,8 +32,13 @@
   </div>
   <div class="mb-4">
     {% for message in messages %}
-      <div class="row">
-        <p>{{ message.from_user }}: {{ message.text }} {{ message.send_date }}</p>
+      <div class="card my-2">
+        <div class="card-body m-2">
+          <h4>{{ message.from_user.username }}</h4>
+          <p>Sent: {{ message.send_date }}</p>
+          <p>{{ message.text }}</p>
+          <a href="#" class="card-link">{{ message.from_user }}'s profile</a>
+        </div>
       </div>
     {% empty %}
       <div class="row">
