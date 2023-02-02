@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-<<<<<<< HEAD
 from .models import Job
 from .forms import JobForm, EmailChangeForm
 from django.contrib.auth.models import User
@@ -10,11 +9,9 @@ from django.shortcuts import redirect
 from .forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-=======
 from .models import Job, Message
 from .forms import JobForm
 from django.contrib.auth.models import User
->>>>>>> u4-dashboard
 
 
 def home(request):
