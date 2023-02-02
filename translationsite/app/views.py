@@ -113,3 +113,8 @@ def post_job(request):
     else:
         form = JobForm()
     return render(request, "app/post_job.html", {"form": form})
+
+
+def jobs(request):
+    context = {}
+    return render(request, "app/jobs.html", context)

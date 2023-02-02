@@ -1,0 +1,21 @@
+{% extends 'app/base.html' %}
+{% block content %}
+<form action="{% url 'app:post_job' %}" method="post">
+    <div class="form-group">
+    {% csrf_token %}
+    
+
+    <div class="row mt-4 text-center mb-5">
+        <div clss="col-md-8 ms-2">
+            <input type="submit" value="Bid" class="custom-btn btn px-4 py-2">
+        </div>
+    </div>
+    <div class="row mt-4 text-center mb-5">
+        <div clss="col-md-8 ms-2">
+            <input type="button" value="Message" class="custom-btn btn px-4 py-2">
+        </div>
+    </div>
+
+    </div>
+</form>
+{% endblock content %}
