@@ -4,11 +4,12 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django import forms
 from django.forms import ModelForm
+import datetime
 
 # Create your models here.
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    token_balance = models.FloatField(default=0.0)
+    token_balance = models.DecimalField(default=0.0, max_digits=5, decimal_places=2)
 
     def __str__(self) -> str:
         return f"{self.user.username}: {self.token_balance}"
@@ -72,3 +73,18 @@ class Job(models.Model):
 
     def __str__(self):
         return f"{self.id}-{self.title[:30]}-{self.description[:100]}-{self.source_language[:15]}-{self.target_language[:15]}-{self.job_field}-{self.budget}-{self.text}"
+
+
+class Message(models.Model):
+    from_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="from_user_message_set"
+    )
+    to_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="to_user_message_set"
+    )
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    text = models.TextField()
+    send_date = models.DateTimeField(default=datetime.datetime.now)
+
+    def __str__(self) -> str:
+        return f"{self.from_user.username}->{self.to_user.username}: {self.text}"
