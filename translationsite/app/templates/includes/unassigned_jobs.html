@@ -1,0 +1,23 @@
+
+  <div class="card mt-4">
+    <div class="card-body">
+        <h4 class="card-title">{{ job.title }}</h4>
+        <div class="card-subtitle mt-3"><b>Description:</b> {{ job.description }}</div>
+        <div class="card-text mt-1"><b>Source language:</b>  {{ job.source_language }}</div>
+        <div class="card-text mt-1"><b>Target language:</b>  {{ job.target_language }}</div>
+        <div class="card-text mt-1"><b>Job field:</b>  {{ job.job_field }}</div>
+        <p class="card-text mt-1"><b>Budget:</b>  {{ job.budget }} token(s)</p>
+        <p class="card-text mt-1"><a href="#">User's profile</a></p>
+        <div class="row">
+            <form action="{% url 'app:jobs_bid' %}" method="POST" class="col-2">
+                {% csrf_token %}
+                <button type="submit" class="btn custom-btn">Bid on Job</button>
+            </form>
+            <form action="{% url 'app:jobs_message' %}" method="POST" class="col-2">
+                {% csrf_token %}
+                <button type="submit" class="btn custom-btn">Message User</a>
+            </form>
+            <div class="col-6"></div>
+        </div>
+    </div>
+  </div>
