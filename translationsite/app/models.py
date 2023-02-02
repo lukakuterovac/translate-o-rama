@@ -84,6 +84,7 @@ class Message(models.Model):
     to_user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="to_user_message_set"
     )
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
     text = models.TextField()
     send_date = models.DateTimeField(default=datetime.datetime.now)
 
