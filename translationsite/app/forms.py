@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Job, UserProfile, Message
+from .models import Job, JobBid, Message
 from django.contrib.auth.forms import SetPasswordForm, UserChangeForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
@@ -124,6 +124,22 @@ class EmailChangeForm(forms.Form):
         if commit:
             self.user.save()
         return self.user
+
+
+class JobBidForm(ModelForm):
+    class Meta:
+        model = JobBid
+        fields = ["bid"]
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
+        super(JobBidForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        if "bid" in self.cleaned_data:
+            if self.cleaned_data["bid"] > self.user.userprofile.token_balance:
+                raise ValidationError("User doesn't have enough tokens!")
+        return self.cleaned_data
 
 
 class MessageForm(ModelForm):
