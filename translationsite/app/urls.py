@@ -11,6 +11,6 @@ urlpatterns = [
     path("profile/password_change", views.change_password, name="new_password"),
     path("profile/email_change", views.email_change, name="new_email"),
     path("jobs", views.jobs, name="jobs"),
-    path("jobs/job_bid", views.job_bid, name="jobs_bid"),
+    path("jobs/job_bid/<int:job_id>", views.job_bid, name="jobs_bid"),
     path("jobs/<int:job_id>", views.message_user, name="message_user"),
 ]

@@ -8,8 +8,8 @@ from django.shortcuts import redirect
 from .forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-from .models import Job, Message
-from .forms import JobForm, MessageForm
+from .models import Job, Message, JobBid
+from .forms import JobForm, MessageForm, JobBidForm
 from django.db.models import Q
 
 
@@ -132,15 +132,28 @@ def jobs(request):
     return render(request, "app/jobs.html", context)
 
 
-def job_bid(request):
+def job_bid(request, job_id):
     user = request.user
+    form = JobBidForm()
     if request.method == "POST":
-        jobs = Job.objects.all().filter(~Q(user=user), Q(is_assigned=False))
+        job = Job.objects.get(pk=job_id)
+        form = JobBidForm(request.POST)
+        if form.is_valid():
+            job_bid = JobBid.objects.create(
+                bid_user=user, job=job, bid=form.cleaned_data.get("bid")
+            )
+            return HttpResponseRedirect(reverse("app:jobs", args=[]))
+        else:
+            return render(request, "app/bid.html", {"form": form, "job": job})
+    else:
+        form = JobBidForm()
+        job = Job.objects.get(pk=job_id)
         context = {
             "user": user,
-            "jobs": jobs,
+            "job": job,
+            "form": form,
         }
-        return HttpResponseRedirect(request, "app/jobs.html", context)
+    return render(request, "app/bid.html", context)
 
 
 def message_user(request, job_id):

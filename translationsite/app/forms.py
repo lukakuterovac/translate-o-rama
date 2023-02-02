@@ -129,7 +129,7 @@ class EmailChangeForm(forms.Form):
 class JobBidForm(ModelForm):
     class Meta:
         model = JobBid
-        fields = ["job", "bid"]
+        fields = ["bid"]
 
 
 class MessageForm(ModelForm):
