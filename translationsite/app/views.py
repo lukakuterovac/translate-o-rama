@@ -9,7 +9,7 @@ from .forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from .models import Job, Message
-from .forms import JobForm
+from .forms import JobForm, MessageForm
 from django.db.models import Q
 
 
@@ -142,5 +142,24 @@ def job_bid(request):
     return HttpResponseRedirect(request, "app/jobs.html", context)
 
 
-def job_message(request):
-    pass
+def message_user(request, job_id):
+    user = request.user
+    job = get_object_or_404(Job, pk=job_id)
+
+    if request.method == "POST":
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = Message.objects.create(
+                from_user=request.user,
+                to_user=job.user,
+                job=job,
+                text=form.cleaned_data.get("text"),
+            )
+            return HttpResponseRedirect(reverse("app:jobs", args=[]))
+        else:
+            context = {"user": user, "job": job, "form": form}
+            return render(request, "app/message_page.html", context)
+    else:
+        form = MessageForm()
+        context = {"user": user, "job": job, "form": form}
+    return render(request, "app/message_page.html", context)

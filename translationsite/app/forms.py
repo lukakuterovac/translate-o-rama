@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Job, UserProfile
+from .models import Job, UserProfile, Message
 from django.contrib.auth.forms import SetPasswordForm, UserChangeForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
@@ -124,3 +124,11 @@ class EmailChangeForm(forms.Form):
         if commit:
             self.user.save()
         return self.user
+
+
+class MessageForm(ModelForm):
+    class Meta:
+        model = Message
+        fields = [
+            "text",
+        ]

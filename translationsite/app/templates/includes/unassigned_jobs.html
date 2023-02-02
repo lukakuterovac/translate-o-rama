@@ -13,7 +13,7 @@
                 {% csrf_token %}
                 <button type="submit" class="btn custom-btn">Bid on Job</button>
             </form>
-            <form action="{% url 'app:jobs_message' %}" method="POST" class="col-2">
+            <form action="{% url 'app:message_user' job.id %}" method="POST" class="col-2">
                 {% csrf_token %}
                 <button type="submit" class="btn custom-btn">Message User</a>
             </form>
