@@ -22,10 +22,17 @@ def dashboard(request):
     user = request.user
     jobs = Job.objects.filter(user=user)
     messages = Message.objects.filter(to_user=user).order_by("send_date").reverse()
+    bids = []
+    temp = JobBid.objects.all()
+    for job in jobs:
+        for bid in temp:
+            if bid.job == job:
+                bids.append(bid)
     context = {
         "user": user,
         "jobs": jobs,
         "messages": messages,
+        "bids": bids,
     }
     return render(request, "app/dashboard.html", context)
 
