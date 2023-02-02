@@ -1,0 +1,27 @@
+{% extends 'app/base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<h1 class="text-center mb-5 mt-3">Message</h1>
+<div class="content-section mt-5 mb-5 p-2 ">
+	<div class="container w-50 mb-5 justify-content-center">
+		<div class="ms-5">
+			<p><b>From:</b> {{user.username}}</p>
+			<p><b>To:</b> {{job.user.username}}</p>   
+			<p><b>For job:</b> {{job}}</p>   
+		</div>
+	</div>
+	<form action="{% url 'app:message_user' job.id %}" method="POST">
+		{% csrf_token %}
+		{% include 'includes/job_form.html' with form=form %}
+
+		<div class="row mt-4 text-center mb-5">
+            <div clss="col-md-8 ms-2">
+				<button class="btn btn-outline-info" type="submit">Send message</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+{% endblock content %}

@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Job, UserProfile, JobBid
+from .models import Job, JobBid, Message
 from django.contrib.auth.forms import SetPasswordForm, UserChangeForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
@@ -130,3 +130,11 @@ class JobBidForm(ModelForm):
     class Meta:
         model = JobBid
         fields = ["job", "bid"]
+
+
+class MessageForm(ModelForm):
+    class Meta:
+        model = Message
+        fields = [
+            "text",
+        ]
