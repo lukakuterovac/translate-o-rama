@@ -134,10 +134,10 @@ def jobs(request):
 
 def job_bid(request, job_id):
     user = request.user
-    form = JobBidForm()
+    form = JobBidForm(user=user)
     if request.method == "POST":
         job = Job.objects.get(pk=job_id)
-        form = JobBidForm(request.POST)
+        form = JobBidForm(request.POST, user=user)
         if form.is_valid():
             job_bid = JobBid.objects.create(
                 bid_user=user, job=job, bid=form.cleaned_data.get("bid")
@@ -146,7 +146,7 @@ def job_bid(request, job_id):
         else:
             return render(request, "app/bid.html", {"form": form, "job": job})
     else:
-        form = JobBidForm()
+        form = JobBidForm(user=user)
         job = Job.objects.get(pk=job_id)
         context = {
             "user": user,

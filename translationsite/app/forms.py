@@ -131,6 +131,16 @@ class JobBidForm(ModelForm):
         model = JobBid
         fields = ["bid"]
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
+        super(JobBidForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        if "bid" in self.cleaned_data:
+            if self.cleaned_data["bid"] > self.user.userprofile.token_balance:
+                raise ValidationError("User doesn't have enough tokens!")
+        return self.cleaned_data
+
 
 class MessageForm(ModelForm):
     class Meta:
