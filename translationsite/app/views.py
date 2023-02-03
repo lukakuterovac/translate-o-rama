@@ -57,12 +57,12 @@ def profile(request, user_id):
     )  # jobs that are from user
     completed_jobs = Job.objects.filter(Q(user=user_from_job), Q(is_completed=True))
 
-    translators_bid = JobBid.objects.filter(Q(bid_user=user))
+    translators_bid = JobBid.objects.filter(Q(bid_user=user_from_job))
     translator_assigned_jobs = Job.objects.filter(
-        Q(translator=user), Q(is_assigned=True)
+        Q(translator=user_from_job), Q(is_assigned=True)
     )  # jobs that are NOT from user
     translator_completed_jobs = Job.objects.filter(
-        Q(translator=user), Q(is_completed=True)
+        Q(translator=user_from_job), Q(is_completed=True)
     )
 
     context = {
