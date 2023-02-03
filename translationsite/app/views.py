@@ -30,12 +30,14 @@ def dashboard(request):
     return render(request, "app/dashboard.html", context)
 
 
-def profile(request):
+def profile(request, user_id):
     user = request.user
+    user_from_job = User.objects.get(pk=user_id)
     email_form = EmailChangeForm(user)
     password_form = SetPasswordForm(user)
     context = {
         "user": user,
+        "user_from_jobs": user_from_job,
         "email_form": email_form,
         "password_form": password_form,
     }
@@ -64,7 +66,6 @@ def email_change(request):
             context = {"user": user, "email_form": form, "password_form": password_form}
             return render(request, "app/profile.html", context)
     else:
-
         return render(
             request,
             "app/profile.html",
@@ -93,7 +94,6 @@ def change_password(request):
 
 
 def post_job(request):
-
     form = JobForm(initial={"job_field": "ART"})
     if request.method == "POST":
         form = JobForm(request.POST)

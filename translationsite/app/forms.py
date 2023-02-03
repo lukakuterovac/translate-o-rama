@@ -130,6 +130,11 @@ class JobBidForm(ModelForm):
     class Meta:
         model = JobBid
         fields = ["bid"]
+        widgets = {
+            "bid": forms.NumberInput(
+                attrs={"class": "form-control", "placeholder": "0.0"}
+            ),
+        }
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user", None)
