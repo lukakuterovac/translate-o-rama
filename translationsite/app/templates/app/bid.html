@@ -1,0 +1,18 @@
+{% extends 'app/base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<h1 class="text-center mb-5 mt-3">Bid Job</h1>
+    <form action="{% url 'app:jobs_bid' job.id %}" method="post">
+        <div class="form-group">
+        {% csrf_token %}
+        {% include 'includes/bs4_form.html' with form=form %}
+
+        <div class="row mt-4 text-center mb-5">
+            <div clss="col-md-8 ms-2">
+                <input type="submit" value="Bid" class="custom-btn btn px-4 py-2">
+            </div>
+        </div>
+        </div>
+    </form>
+{% endblock content %}

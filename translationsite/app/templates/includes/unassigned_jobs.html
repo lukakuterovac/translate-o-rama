@@ -9,7 +9,7 @@
         <p class="card-text mt-1"><b>Budget:</b>  {{ job.budget }} token(s)</p>
         <p class="card-text mt-1"><a href="#">User's profile</a></p>
         <div class="row">
-            <form action="{% url 'app:jobs_bid' %}" method="POST" class="col-2">
+            <form action="{% url 'app:jobs_bid' job.id %}" method="POST" class="col-2">
                 {% csrf_token %}
                 <button type="submit" class="btn custom-btn">Bid on Job</button>
             </form>
