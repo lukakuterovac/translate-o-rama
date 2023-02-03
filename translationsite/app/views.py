@@ -47,8 +47,9 @@ def dashboard(request):
     return render(request, "app/dashboard.html", context)
 
 
-def profile(request):
+def profile(request, user_id):
     user = request.user
+    user_from_job = User.objects.get(pk=user_id)
     email_form = EmailChangeForm(user)
     password_form = SetPasswordForm(user)
     assigned_jobs = Job.objects.filter(
@@ -57,6 +58,7 @@ def profile(request):
     completed_jobs = Job.objects.filter(Q(user=user), Q(is_completed=True))
     context = {
         "user": user,
+        "user_from_jobs": user_from_job,
         "email_form": email_form,
         "password_form": password_form,
         "assigned_jobs": assigned_jobs,
@@ -66,7 +68,7 @@ def profile(request):
 
 
 @login_required()
-def email_change(request):
+def email_change(request, user_id):
     user = request.user
     form = EmailChangeForm(user)
 
@@ -82,21 +84,16 @@ def email_change(request):
                 "password_form": password_form,
             }
 
-            return HttpResponseRedirect(reverse("app:profile", args=[]))
-        else:
-            context = {"user": user, "email_form": form, "password_form": password_form}
-            return render(request, "app/profile.html", context)
+        return HttpResponseRedirect(reverse("app:profile", args=[user_id]))
     else:
-        return render(
-            request,
-            "app/profile.html",
-            {"email_form": form},
-            context_instance=RequestContext(request),
-        )
+        context = {"user": user, "email_form": form, "password_form": password_form}
+        return render(request, "app/profile.html", context)
 
 
-def change_password(request):
+@login_required()
+def change_password(request, user_id):
     user = request.user
+    email_form = EmailChangeForm(user)
     if request.method == "POST":
         form = SetPasswordForm(user, request.POST)
         if form.is_valid():
@@ -106,11 +103,12 @@ def change_password(request):
         else:
             for error in list(form.errors.values()):
                 messages.error(request, error)
-        context = {"user": user, "form": form}
-        return HttpResponseRedirect(request, "app/profile.html", context)
+        context = {"user": user, "form": form, "email_form": email_form}
+        return HttpResponseRedirect(reverse("app:profile", args=[user_id]))
     else:
         form = SetPasswordForm(user)
-        context = {"user": user, "form": form}
+
+        context = {"user": user, "form": form, "email_form": email_form}
         return render(request, "app/profile.html", context)
 
 
@@ -130,13 +128,6 @@ def post_job(request):
                 text=form.cleaned_data.get("text"),
             )
             return HttpResponseRedirect(reverse("app:post_job", args=[]))
-        else:
-            errors = []
-            for k, v in form.errors.items():
-                errors.append(v)
-            return render(
-                request, "app/post_job.html", {"form": form, "errors": errors}
-            )
     else:
         form = JobForm()
     return render(request, "app/post_job.html", {"form": form})
@@ -155,9 +146,9 @@ def jobs(request):
 
 def job_bid(request, job_id):
     user = request.user
-    form = JobBidForm(user=user)
+    form = JobBidForm(user=user, initial={"bid": 0.0})
+    job = Job.objects.get(pk=job_id)
     if request.method == "POST":
-        job = Job.objects.get(pk=job_id)
         form = JobBidForm(request.POST, user=user)
         if form.is_valid():
             job_bid = JobBid.objects.create(
@@ -167,8 +158,6 @@ def job_bid(request, job_id):
         else:
             return render(request, "app/bid.html", {"form": form, "job": job})
     else:
-        form = JobBidForm(user=user)
-        job = Job.objects.get(pk=job_id)
         context = {
             "user": user,
             "job": job,

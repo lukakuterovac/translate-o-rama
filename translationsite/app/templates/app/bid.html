@@ -6,7 +6,7 @@
     <form action="{% url 'app:jobs_bid' job.id %}" method="post">
         <div class="form-group">
         {% csrf_token %}
-        {% include 'includes/bs4_form.html' with form=form %}
+        {% include 'includes/job_form.html' with form=form %}
 
         <div class="row mt-4 text-center mb-5">
             <div clss="col-md-8 ms-2">
