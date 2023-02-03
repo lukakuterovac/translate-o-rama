@@ -3,13 +3,13 @@
  
     <h1 class="text-center">User profile</h1>
 
-    <p class="fw-bold">Username:{{ user_from_jobs.username }}</p>
+    <p class="mb-3"><b>Username:</b>{{ user_from_jobs.username }}</p>
 
-    <p class="fw-bold">Email address: {{ user_from_jobs.email }}</p>
+    <p class="mb-3"><b>Email address:</b> {{ user_from_jobs.email }}</p>
 
-    <p class="fw-bold">Accepted jobs:</p>
+    <h5 class="mb-3"><b>Accepted jobs:</b></h5>
 
-    <p class="fw-bold">Completed jobs:</p>
+    <h5 class="mb-3"><b>Completed jobs:</b></h5>
 
     {% if user.id == user_from_jobs.id %}
         <div class="form-group">
