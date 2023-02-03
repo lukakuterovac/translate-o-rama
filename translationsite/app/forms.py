@@ -167,3 +167,24 @@ class MessageForm(ModelForm):
         fields = [
             "text",
         ]
+
+
+class CompleteJobForm(ModelForm):
+    class Meta:
+        model = Job
+        fields = [
+            "translation",
+        ]
+
+    def clean(self):
+        if "translation" in self.cleaned_data:
+            if self.cleaned_data["translation"] == "":
+                raise ValidationError("You have to translate text!")
+        return self.cleaned_data
+
+    def save(self, commit=True):
+        translation = self.cleaned_data["translation"]
+        self.job.translation = translation
+        if commit:
+            self.job.save()
+        return self.job

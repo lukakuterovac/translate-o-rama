@@ -13,15 +13,14 @@
 		</div>
 	</div>
 	<form action="{% url 'app:complete_job' user.id job.id %}" method="POST">
-		{% csrf_token %}
-		<p>
-            <label for="my_translated_text">My translation</label>
-            <input id="my_translated_text" name="translated_text" type="text">
-        </p>
-   
-		<div class="row mt-4 text-center mb-5">
-            <div clss="col-md-8 ms-2">
-				<button class="btn custom-btn" type="submit">Submit</button>
+		<div class="form-group">
+			{% csrf_token %}
+			{% include 'includes/job_form.html' with form=form %}
+	
+			<div class="row mt-4 text-center mb-5">
+				<div clss="col-md-8 ms-2">
+					<button class="btn custom-btn" type="submit">Submit</button>
+				</div>
 			</div>
 		</div>
     </form>

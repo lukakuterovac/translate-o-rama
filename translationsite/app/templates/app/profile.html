@@ -34,7 +34,7 @@
         {% for job in translator_assigned_jobs %}
             {% include 'includes/job_card.html' with job=job %}
             <!--za complete btn-->
-            <form action="{% url 'app:complete_job' user.id job.id %}" method="POST">
+            <form action="{% url 'app:complete_job' user.id job.id %}">
                 {% csrf_token %}
                 <div class="row mt-4 text-center mb-5">
                     <div clss="col-md-8 ms-2">

@@ -9,7 +9,7 @@ from .forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from .models import Job, Message, JobBid
-from .forms import JobForm, MessageForm, JobBidForm
+from .forms import JobForm, MessageForm, JobBidForm, CompleteJobForm
 from django.db.models import Q
 
 
@@ -197,16 +197,40 @@ def message_user(request, job_id):
 
 def complete_job(request, user_id, job_id):
     user = User.objects.get(pk=user_id)
-    job_to_complete = Job.objects.get(pk=job_id)
+    job_to_complete = get_object_or_404(Job, pk=job_id)
+    form = CompleteJobForm(job_to_complete)
 
     context = {
         "job": job_to_complete,
         "user": user,
+        "form": form,
     }
 
     if request.method == "POST":
-        job_to_complete.translation = request.POST.get("translated_text")
+        form = CompleteJobForm(request.POST, job_to_complete)
+        if form.is_valid():
+            blog = Job.objects.get(id=job_to_complete.id)
 
-        return HttpResponseRedirect(reverse("app:complete_job", args=[user_id, job_id]))
+            for key, value in job_to_complete.iteritems():
+                setattr(blog, key, value)
+            blog.save()
 
+            # job_to_complete.translation = form.cleaned_data.get("translated_text")
+            # form.save()
+
+            return HttpResponseRedirect(reverse("app:profile", args=[user_id]))
+        else:
+            context = {
+                "job": job_to_complete,
+                "user": user,
+                "form": form,
+            }
+            return render(request, "app/complete_job.html", context)
+    else:
+        form = CompleteJobForm()
+        context = {
+            "job": job_to_complete,
+            "user": user,
+            "form": form,
+        }
     return render(request, "app/complete_job.html", context)
