@@ -17,13 +17,17 @@
   <div class="mb-5">
     {% for job in jobs %}
       {% include 'includes/job_card.html' with job=job %}
-      {% for bid in bids %}
-        {% if bid.job == job %}
-          <div class="row my-3">
-            <h5 class="col-3 d-block"><a href="#">{{ bid.bid_user }}</a>: {{ bid.bid }}</h5><button type="button" class="btn btn-primary col-1 ms-5">Assign</button>
-          </div>
-        {% endif %}
-      {% endfor %}
+      {% if job.is_assigned %}
+        <div>ASSIGNED TO SOMEONE</div>
+      {% else %}
+        {% for bid in bids %}
+          {% if bid.job == job %}
+            <div class="row my-3">
+              <h5 class="col-3 d-block"><a href="#">{{ bid.bid_user }}</a>: {{ bid.bid }}</h5><button type="button" class="btn btn-primary col-1 ms-5">Assign</button>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
     {% empty %}
       <div class="row">
         No jobs posted.
