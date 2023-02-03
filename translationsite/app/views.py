@@ -52,16 +52,16 @@ def profile(request, user_id):
     user_from_job = User.objects.get(pk=user_id)
     email_form = EmailChangeForm(user)
     password_form = SetPasswordForm(user)
-    assigned_jobs = Job.objects.filter(
-        Q(user=user), Q(is_assigned=True)
+    accepted_jobs = Job.objects.filter(
+        Q(user=user_from_job), Q(is_assigned=True)
     )  # jobs that are from user
-    completed_jobs = Job.objects.filter(Q(user=user), Q(is_completed=True))
+    completed_jobs = Job.objects.filter(Q(user=user_from_job), Q(is_completed=True))
     context = {
         "user": user,
         "user_from_jobs": user_from_job,
         "email_form": email_form,
         "password_form": password_form,
-        "assigned_jobs": assigned_jobs,
+        "accepted_jobs": accepted_jobs,
         "completed_jobs": completed_jobs,
     }
     return render(request, "app/profile.html", context)
@@ -135,7 +135,9 @@ def post_job(request):
 
 def jobs(request):
     user = request.user
-    jobs = Job.objects.all().filter(~Q(user=user), Q(is_assigned=False))
+    jobs = Job.objects.all().filter(
+        ~Q(user=user), Q(is_assigned=False), Q(is_completed=False)
+    )
 
     context = {
         "user": user,
