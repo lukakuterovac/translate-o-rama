@@ -177,3 +177,12 @@ def message_user(request, job_id):
         form = MessageForm()
         context = {"user": user, "job": job, "form": form}
     return render(request, "app/message_page.html", context)
+
+
+def assign_job(request, bid_id):
+    bid = get_object_or_404(JobBid, pk=bid_id)
+    job = get_object_or_404(Job, pk=bid.job.id)
+    job.assigned_to = bid
+    job.is_assigned = True
+    job.save()
+    return HttpResponseRedirect(reverse("app:dashboard", args=[]))
