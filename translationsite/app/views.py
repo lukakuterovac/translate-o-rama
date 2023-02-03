@@ -61,21 +61,16 @@ def email_change(request, user_id):
                 "password_form": password_form,
             }
 
-            return HttpResponseRedirect(reverse("app:profile", args=[user_id]))
-        else:
-            context = {"user": user, "email_form": form, "password_form": password_form}
-            return render(request, "app/profile.html", context)
+        return HttpResponseRedirect(reverse("app:profile", args=[user_id]))
     else:
-        return render(
-            request,
-            "app/profile.html",
-            {"user": user, "email_form": form, "password_form": password_form},
-        )
+        context = {"user": user, "email_form": form, "password_form": password_form}
+        return render(request, "app/profile.html", context)
 
 
 @login_required()
 def change_password(request, user_id):
     user = request.user
+    email_form = EmailChangeForm(user)
     if request.method == "POST":
         form = SetPasswordForm(user, request.POST)
         if form.is_valid():
@@ -85,11 +80,12 @@ def change_password(request, user_id):
         else:
             for error in list(form.errors.values()):
                 messages.error(request, error)
-        context = {"user": user, "form": form}
-        return HttpResponseRedirect(request, "app/profile.html", context)
+        context = {"user": user, "form": form, "email_form": email_form}
+        return HttpResponseRedirect(reverse("app:profile", args=[user_id]))
     else:
         form = SetPasswordForm(user)
-        context = {"user": user, "form": form}
+
+        context = {"user": user, "form": form, "email_form": email_form}
         return render(request, "app/profile.html", context)
 
 
