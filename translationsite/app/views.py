@@ -51,10 +51,16 @@ def profile(request):
     user = request.user
     email_form = EmailChangeForm(user)
     password_form = SetPasswordForm(user)
+    assigned_jobs = Job.objects.filter(
+        Q(user=user), Q(is_assigned=True)
+    )  # jobs that are from user
+    completed_jobs = Job.objects.filter(Q(user=user), Q(is_completed=True))
     context = {
         "user": user,
         "email_form": email_form,
         "password_form": password_form,
+        "assigned_jobs": assigned_jobs,
+        "completed_jobs": completed_jobs,
     }
     return render(request, "app/profile.html", context)
 
