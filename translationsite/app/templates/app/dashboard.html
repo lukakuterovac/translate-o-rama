@@ -18,15 +18,17 @@
     {% for job in jobs %}
       {% include 'includes/job_card.html' with job=job %}
       {% if job.is_assigned %}
-        <div>ASSIGNED TO SOMEONE</div>
+        <div class="row my-3 ms-2">  
+          <h5 class="col-4 d-block">Assigned to: <a href="#">{{ job.assigned_to.bid_user.username }}</a> for {{ job.assigned_to.bid }} token(s)</h5>
+        </div>
       {% else %}
         {% for bid in bids %}
           {% if bid.job == job %}
-            <div class="row my-3">
-              <h5 class="col-3 d-block"><a href="#">{{ bid.bid_user }}</a>: {{ bid.bid }}</h5>
-              <form action="{% url 'app:assign_job' bid.id %}" method="post">
+            <div class="row my-3 ms-2">
+              <h5 class="col-4 d-block"><a href="#">{{ bid.bid_user }}</a>: {{ bid.bid }} token(s)</h5>
+              <form action="{% url 'app:assign_job' bid.id %}" class="col-3" method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-primary col-1 ms-5">Assign</button>
+                <button type="submit" class="btn btn-primary col-3">Assign</button>
               </form>
             </div>
           {% endif %}
