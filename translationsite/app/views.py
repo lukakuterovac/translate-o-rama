@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from .models import Job
 from .forms import JobForm, EmailChangeForm
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -9,7 +10,8 @@ from .forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from .models import Job, Message, JobBid
-from .forms import JobForm, MessageForm, JobBidForm
+from .forms import JobForm, JobBidForm, MessageForm
+from django.contrib.auth.models import User
 from django.db.models import Q
 
 
