@@ -184,7 +184,7 @@ class CompleteJobForm(ModelForm):
 
     def save(self, commit=True):
         translation = self.cleaned_data["translation"]
-        self.job.translation = translation
+        self.instance.translation = translation
         if commit:
-            self.job.save()
-        return self.job
+            self.instance.save()
+        return self.instance
