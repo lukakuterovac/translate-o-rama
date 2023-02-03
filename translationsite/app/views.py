@@ -52,11 +52,23 @@ def profile(request, user_id):
     user_from_job = User.objects.get(pk=user_id)
     email_form = EmailChangeForm(user)
     password_form = SetPasswordForm(user)
+
+    translators_bid = JobBid.objects.filter(Q(bid_user=user))
+    translator_assigned_jobs = Job.objects.filter(
+        Q(translator=user), Q(is_assigned=True)
+    )  # jobs that are NOT from user
+    translator_completed_jobs = Job.objects.filter(
+        Q(translator=user), Q(is_completed=True)
+    )
+
     context = {
         "user": user,
         "user_from_jobs": user_from_job,
         "email_form": email_form,
         "password_form": password_form,
+        "translator_bids": translators_bid,
+        "translator_assigned_jobs": translator_assigned_jobs,
+        "translator_completed_jobs": translator_completed_jobs,
     }
     return render(request, "app/profile.html", context)
 
