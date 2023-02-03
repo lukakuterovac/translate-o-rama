@@ -3,13 +3,13 @@
  
     <h1 class="text-center">User profile</h1>
 
-    <p class="fw-bold">Username: {{ user.username }}</p>
+    <h5 class="mb-3"><b>Username:</b> {{ user.username }}</h5>
 
-    <p class="fw-bold">Email address: {{ user.email }}</p>
+    <h5 class="mb-3"><b>Email address:</b> {{ user.email }}</h5>
 
-    <p class="fw-bold">Accepted jobs:</p>
+    <h5 class="mb-3"><b>Accepted jobs:</b></h5>
 
-    <p class="fw-bold">Completed jobs:</p>
+    <h5 class="mb-3"><b>Completed jobs:</b></h5>
 
     <div class="form-group">
         {% block email_new %}
