@@ -55,11 +55,13 @@
     <h2 class="text-center mt-5 mb-4">Submitted bids</h2>
     {% for bid in translator_bids %}
       {% include 'includes/bid_form.html' with job_bid=bid %}
-  
     {% endfor %}
 
+    <h2 class="text-center mt-5 mb-4">Assigned jobs</h2>
+    {% for a_job in assigned_jobs %}
+      {% include 'includes/job_card.html' with job=a_job %}
+    {% endfor %}
+
+
   {% endif %}
-
-
-
 {% endblock content %}

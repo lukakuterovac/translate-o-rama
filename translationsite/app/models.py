@@ -59,7 +59,7 @@ class JobField(models.Model):
 
 
 class Job(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
     title = models.TextField(blank=False, unique=True)
     description = models.TextField(blank=False)
     source_language = models.TextField(blank=False)
@@ -73,6 +73,14 @@ class Job(models.Model):
     text = models.TextField(blank=False)
     is_assigned = models.BooleanField(default=False)
     is_completed = models.BooleanField(default=False)
+
+    translator = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="set_as_translator_of_job",
+    )
 
     def __str__(self):
         return f"{self.id}-{self.title[:30]}-{self.description[:100]}-{self.source_language[:15]}-{self.target_language[:15]}-{self.job_field}-{self.budget}-{self.text}"

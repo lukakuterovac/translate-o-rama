@@ -30,6 +30,9 @@ def dashboard(request):
                 bids.append(bid)
 
     translators_bid = JobBid.objects.filter(Q(bid_user=user))
+    assigned_jobs = Job.objects.filter(
+        Q(translator=user), Q(is_assigned=True)
+    )  # jobs that are not from user
 
     context = {
         "user": user,
@@ -37,6 +40,7 @@ def dashboard(request):
         "messages": messages,
         "bids": bids,
         "translator_bids": translators_bid,
+        "assigned_jobs": assigned_jobs,
     }
     return render(request, "app/dashboard.html", context)
 
