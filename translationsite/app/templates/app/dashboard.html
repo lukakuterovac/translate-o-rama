@@ -62,6 +62,11 @@
       {% include 'includes/job_card.html' with job=a_job %}
     {% endfor %}
 
+    <!--Jobs that he ended-->
+    <h2 class="text-center mt-5 mb-4">Completed jobs</h2>
+    {% for c_job in completed_jobs %}
+      {% include 'includes/job_card.html' with job=c_job %}
+    {% endfor %}
 
   {% endif %}
 {% endblock content %}
