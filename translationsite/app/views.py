@@ -56,6 +56,15 @@ def profile(request, user_id):
         Q(user=user_from_job), Q(is_assigned=True)
     )  # jobs that are from user
     completed_jobs = Job.objects.filter(Q(user=user_from_job), Q(is_completed=True))
+
+    translators_bid = JobBid.objects.filter(Q(bid_user=user))
+    translator_assigned_jobs = Job.objects.filter(
+        Q(translator=user), Q(is_assigned=True)
+    )  # jobs that are NOT from user
+    translator_completed_jobs = Job.objects.filter(
+        Q(translator=user), Q(is_completed=True)
+    )
+
     context = {
         "user": user,
         "user_from_jobs": user_from_job,
@@ -63,6 +72,9 @@ def profile(request, user_id):
         "password_form": password_form,
         "accepted_jobs": accepted_jobs,
         "completed_jobs": completed_jobs,
+        "translator_bids": translators_bid,
+        "translator_assigned_jobs": translator_assigned_jobs,
+        "translator_completed_jobs": translator_completed_jobs,
     }
     return render(request, "app/profile.html", context)
 
