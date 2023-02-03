@@ -6,10 +6,12 @@ from django import forms
 from django.forms import ModelForm
 import datetime
 
+
 # Create your models here.
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     token_balance = models.DecimalField(default=0.0, max_digits=5, decimal_places=2)
+    is_translator = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"{self.user.username}: {self.token_balance}"

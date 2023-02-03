@@ -1,10 +1,26 @@
 from django.forms import ModelForm
-from .models import Job, JobBid, Message
+from .models import Job, JobBid, Message, UserProfile
 from django.contrib.auth.forms import SetPasswordForm, UserChangeForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django import forms
+
+
+class UserProfileForm(ModelForm):
+    is_translator = forms.BooleanField()
+
+    class Meta:
+        model = UserProfile
+        fields = [
+            "token_balance",
+            "is_translator",
+        ]
+
+        widgets = {
+            "token_balance": forms.NumberInput(attrs={"class": "form-control"}),
+            "is_translator": forms.CheckboxInput(attrs={"class": "form-control"}),
+        }
 
 
 class JobForm(ModelForm):
@@ -52,9 +68,7 @@ class JobForm(ModelForm):
             errors.append(ValidationError("Budget field empty"))
 
         if "title" in self.cleaned_data:
-
             if Job.objects.filter(title=self.cleaned_data["title"]):
-
                 errors.append(ValidationError("A job with this title already exists."))
 
         else:

@@ -28,11 +28,15 @@ def dashboard(request):
         for bid in temp:
             if bid.job == job:
                 bids.append(bid)
+
+    translators_bid = JobBid.objects.filter(Q(bid_user=user))
+
     context = {
         "user": user,
         "jobs": jobs,
         "messages": messages,
         "bids": bids,
+        "translator_bids": translators_bid,
     }
     return render(request, "app/dashboard.html", context)
 
@@ -71,7 +75,6 @@ def email_change(request):
             context = {"user": user, "email_form": form, "password_form": password_form}
             return render(request, "app/profile.html", context)
     else:
-
         return render(
             request,
             "app/profile.html",
@@ -100,7 +103,6 @@ def change_password(request):
 
 
 def post_job(request):
-
     form = JobForm(initial={"job_field": "ART"})
     if request.method == "POST":
         form = JobForm(request.POST)
