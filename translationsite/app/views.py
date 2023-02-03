@@ -193,3 +193,20 @@ def message_user(request, job_id):
         form = MessageForm()
         context = {"user": user, "job": job, "form": form}
     return render(request, "app/message_page.html", context)
+
+
+def complete_job(request, user_id, job_id):
+    user = User.objects.get(pk=user_id)
+    job_to_complete = Job.objects.get(pk=job_id)
+
+    context = {
+        "job": job_to_complete,
+        "user": user,
+    }
+
+    if request.method == "POST":
+        job_to_complete.translation = request.POST.get("translated_text")
+
+        return HttpResponseRedirect(reverse("app:complete_job", args=[user_id, job_id]))
+
+    return render(request, "app/complete_job.html", context)

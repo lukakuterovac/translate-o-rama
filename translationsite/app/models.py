@@ -82,6 +82,8 @@ class Job(models.Model):
         related_name="set_as_translator_of_job",
     )
 
+    translation = models.TextField(blank=True)
+
     def __str__(self):
         return f"{self.id}-{self.title[:30]}-{self.description[:100]}-{self.source_language[:15]}-{self.target_language[:15]}-{self.job_field}-{self.budget}-{self.text}"
 
