@@ -52,9 +52,7 @@ class JobForm(ModelForm):
             errors.append(ValidationError("Budget field empty"))
 
         if "title" in self.cleaned_data:
-
             if Job.objects.filter(title=self.cleaned_data["title"]):
-
                 errors.append(ValidationError("A job with this title already exists."))
 
         else:

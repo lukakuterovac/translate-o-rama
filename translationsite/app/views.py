@@ -109,13 +109,6 @@ def post_job(request):
                 text=form.cleaned_data.get("text"),
             )
             return HttpResponseRedirect(reverse("app:post_job", args=[]))
-        else:
-            errors = []
-            for k, v in form.errors.items():
-                errors.append(v)
-            return render(
-                request, "app/post_job.html", {"form": form, "errors": errors}
-            )
     else:
         form = JobForm()
     return render(request, "app/post_job.html", {"form": form})
@@ -134,9 +127,9 @@ def jobs(request):
 
 def job_bid(request, job_id):
     user = request.user
-    form = JobBidForm(user=user)
+    form = JobBidForm(user=user, initial={"bid": 0.0})
+    job = Job.objects.get(pk=job_id)
     if request.method == "POST":
-        job = Job.objects.get(pk=job_id)
         form = JobBidForm(request.POST, user=user)
         if form.is_valid():
             job_bid = JobBid.objects.create(
@@ -146,8 +139,6 @@ def job_bid(request, job_id):
         else:
             return render(request, "app/bid.html", {"form": form, "job": job})
     else:
-        form = JobBidForm(user=user)
-        job = Job.objects.get(pk=job_id)
         context = {
             "user": user,
             "job": job,
