@@ -19,6 +19,7 @@ def home(request):
     context = {
         "translators": translators,
         "available_jobs": available_jobs,
+        "user": request.user,
     }
     return render(request, "app/home.html", context)
 

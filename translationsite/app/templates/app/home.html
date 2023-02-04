@@ -1,6 +1,6 @@
 {% extends 'app/base.html' %}
 {% block content %}
-        <h3>Translators</h3>
+        <h3 class="text-center mt-3">Translators</h3>
         {% for translator in translators %}
                 {% include 'includes/user_card.html' with user=translator %}
                 {% empty %}
@@ -8,9 +8,9 @@
                 No jobs posted.
                 </div>
         {% endfor %}
-        <h3>Available jobs</h3>
+        <h3 class="text-center mt-5">Available jobs</h3>
         {% for job in available_jobs %}
-                {% include 'includes/job_card.html' with job=job %}
+                {% include 'includes/unassigned_jobs.html' with job=job user=user %}
                 {% empty %}
                 <div class="row">
                         No jobs posted.
