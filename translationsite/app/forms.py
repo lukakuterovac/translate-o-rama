@@ -167,3 +167,24 @@ class MessageForm(ModelForm):
         fields = [
             "text",
         ]
+
+
+class DisputeJobForm(ModelForm):
+    class Meta:
+        model = Job
+        fields = [
+            "dispute",
+        ]
+
+    def clean(self):
+        if "dispute" in self.cleaned_data:
+            if self.cleaned_data["dispute"] == "":
+                raise ValidationError("You have to fill in this field!")
+        return self.cleaned_data
+
+    def save(self, commit=True):
+        dispute = self.cleaned_data["dispute"]
+        self.instance.dispute = dispute
+        if commit:
+            self.instance.save()
+        return self.instance

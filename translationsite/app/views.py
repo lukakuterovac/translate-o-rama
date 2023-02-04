@@ -9,7 +9,7 @@ from .forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from .models import Job, Message, JobBid
-from .forms import JobForm, MessageForm, JobBidForm
+from .forms import JobForm, MessageForm, JobBidForm, DisputeJobForm
 from django.db.models import Q
 from django.contrib.auth.models import User
 
@@ -210,3 +210,36 @@ def job_status(request, job_id):
         "job": job,
     }
     return render(request, "app/job_status.html", context)
+
+
+def dispute_job(request, job_id):
+    user = request.user
+    job = get_object_or_404(Job, pk=job_id)
+    form = DisputeJobForm(instance=job)
+
+    context = {
+        "job": job,
+        "user": user,
+        "form": form,
+    }
+
+    if request.method == "POST":
+        form = DisputeJobForm(request.POST, instance=job)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("app:dashboard", args=[]))
+        else:
+            context = {
+                "job": job,
+                "user": user,
+                "form": form,
+            }
+            return render(request, "app/dispute_job.html", context)
+    else:
+        form = DisputeJobForm(instance=job)
+        context = {
+            "job": job,
+            "user": user,
+            "form": form,
+        }
+    return render(request, "app/dispute_job.html", context)
