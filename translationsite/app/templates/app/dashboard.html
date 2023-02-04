@@ -17,21 +17,7 @@
   <div class="mb-5">
     {% for job in jobs %}
       {% include 'includes/job_card.html' with job=job %}
-<<<<<<< HEAD
       <a href="{% url 'app:job_status' job.id %}" class="btn btn-primary col-2">View status</a>
-      {% for bid in bids %}
-        {% if bid.job == job %}
-          <div class="row my-3">
-            <h5 class="col-3 d-block"><a href="#">{{ bid.bid_user }}</a>: {{ bid.bid }}</h5>
-            <button type="button" class="btn btn-primary col-1 ms-5">Assign</button>
-            
-          </div>
-        {% endif %} 
-      {% endfor %}
-      {% if job.is_completed %}
-          <a href="{% url 'app:dispute_job' job.id %}" class="btn btn-primary  mx-auto">Dispute</a>
-      
-=======
       {% if job.is_assigned %}
         Assigned to <a href="{% url 'app:profile' job.assigned_to.bid_user.id %}">{{ job.assigned_to.bid_user.username }}</a>
         {% if job.is_completed %}
@@ -49,7 +35,6 @@
             </div>
           {% endif %} 
         {% endfor %}
->>>>>>> u7-job-assignment
       {% endif %}
     {% empty %}
       <div class="row">
@@ -68,7 +53,7 @@
           <h4>{{ message.from_user.username }}</h4>
           <p>Sent: {{ message.send_date }}</p>
           <p>{{ message.text }}</p>
-          <a href="#" class="card-link">{{ message.from_user }}'s profile</a>
+          <a href="{% url 'app:profile' message.from_user.id %}" class="card-link">{{ message.from_user }}'s profile</a>
         </div>
       </div>
     {% empty %}
