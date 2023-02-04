@@ -21,7 +21,6 @@
   <div class="mb-4">
     {% for job in jobs %}
       {% include 'includes/job_card.html' with job=job %}
-      <a href="{% url 'app:job_status' job.id %}" class="btn btn-primary ms-2">View status</a>
     {% empty %}
       <div class="row">
         No jobs posted.

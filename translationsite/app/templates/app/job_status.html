@@ -14,5 +14,6 @@
     </h4>
     <div class="mb-2 text-muted">Budget: {{ job.budget }} token(s)</div>
     <div class="">{{ job.description }}</div>
+    <a href="{% url 'app:dashboard' %}" class="btn btn-secondary col-2 mt-4">Back</a>
   </div>
 {% endblock content %}
