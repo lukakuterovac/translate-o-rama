@@ -8,17 +8,9 @@
       <form method="post" accept-charset="utf-8">
         {% csrf_token %}
         
-        {% include 'includes/bs4_form.html' with form=form %}
-        
-        {% if translator.approved %}
-              <div class="form-check">
-                  <input class="form-check-input" type="checkbox" checked="checked" value={{user.id}} name="boxes">
-              </div>
-              {% else %}
-              <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value={{user.id}} name="boxes">
-              </div>
-        {% endif %}
+        {% include 'includes/bs_form.html' with form=signup_form %}
+
+        {% include 'includes/bs_form.html' with form=profile_form %}
 
         <div class="row mt-4 text-center">
           <div class="col-md-12 ms-2 mb-5">
