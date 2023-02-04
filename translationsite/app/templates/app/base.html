@@ -24,10 +24,13 @@
             <div class="collapse navbar-collapse" id="navbarText">
             
               {% if user.is_authenticated %}
+                
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{% url 'app:jobs' %}">Jobs</a>
-                    </li>
+                    {% if user.userprofile.is_translator %}
+                      <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'app:jobs' %}">Jobs</a>
+                      </li>
+                    {% endif %}
                     <li class="nav-item">
                     <a class="nav-link" href="{% url 'app:post_job' %}">Post a job</a>
                     </li>

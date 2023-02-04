@@ -8,9 +8,23 @@
     <h5 class="mb-3"><b>Email address:</b> {{ user_from_jobs.email }}</h5>
 
     <h5 class="mb-3"><b>Accepted jobs:</b></h5>
+    {% for accepted_job in accepted_jobs %}
+        {% include 'includes/job_card.html' with job=accepted_job %}
+        {% empty %}
+        <p >
+          No jobs posted.
+        </p>
+    {% endfor %}
 
     <h5 class="mb-3"><b>Completed jobs:</b></h5>
-
+    {% for completed_job in completed_jobs %}
+        {% include 'includes/job_card.html' with job=completed_job %}
+        {% empty %}
+        <p >
+          No jobs posted.
+        </p>
+    {% endfor %}
+    
     {% if user.id == user_from_jobs.id %}
         <div class="form-group">
             {% block email_new %}

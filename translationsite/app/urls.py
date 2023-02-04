@@ -22,4 +22,6 @@ urlpatterns = [
         views.complete_job,
         name="complete_job",
     ),
+    path("dashboard/job_status/<int:job_id>", views.job_status, name="job_status"),
+    path("dashboard/dispute/<int:job_id>", views.dispute_job, name="dispute_job"),
 ]

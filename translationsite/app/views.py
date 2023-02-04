@@ -9,8 +9,9 @@ from .forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from .models import Job, Message, JobBid
-from .forms import JobForm, MessageForm, JobBidForm, CompleteJobForm
+from .forms import JobForm, MessageForm, JobBidForm, CompleteJobForm, DisputeJobForm
 from django.db.models import Q
+from django.contrib.auth.models import User
 
 
 def home(request):
@@ -52,13 +53,17 @@ def profile(request, user_id):
     user_from_job = User.objects.get(pk=user_id)
     email_form = EmailChangeForm(user)
     password_form = SetPasswordForm(user)
+    accepted_jobs = Job.objects.filter(
+        Q(user=user_from_job), Q(is_assigned=True)
+    )  # jobs that are from user
+    completed_jobs = Job.objects.filter(Q(user=user_from_job), Q(is_completed=True))
 
-    translators_bid = JobBid.objects.filter(Q(bid_user=user))
+    translators_bid = JobBid.objects.filter(Q(bid_user=user_from_job))
     translator_assigned_jobs = Job.objects.filter(
-        Q(translator=user), Q(is_assigned=True)
+        Q(translator=user_from_job), Q(is_assigned=True)
     )  # jobs that are NOT from user
     translator_completed_jobs = Job.objects.filter(
-        Q(translator=user), Q(is_completed=True)
+        Q(translator=user_from_job), Q(is_completed=True)
     )
 
     context = {
@@ -66,6 +71,8 @@ def profile(request, user_id):
         "user_from_jobs": user_from_job,
         "email_form": email_form,
         "password_form": password_form,
+        "accepted_jobs": accepted_jobs,
+        "completed_jobs": completed_jobs,
         "translator_bids": translators_bid,
         "translator_assigned_jobs": translator_assigned_jobs,
         "translator_completed_jobs": translator_completed_jobs,
@@ -119,12 +126,13 @@ def change_password(request, user_id):
 
 
 def post_job(request):
+    user = request.user
     form = JobForm(initial={"job_field": "ART"})
     if request.method == "POST":
-        form = JobForm(request.POST)
+        form = JobForm(request.POST, user=user)
         if form.is_valid():
             job_post = Job.objects.create(
-                user=request.user,
+                user=user,
                 title=form.cleaned_data.get("title"),
                 description=form.cleaned_data.get("description"),
                 source_language=form.cleaned_data.get("source_language"),
@@ -141,7 +149,9 @@ def post_job(request):
 
 def jobs(request):
     user = request.user
-    jobs = Job.objects.all().filter(~Q(user=user), Q(is_assigned=False))
+    jobs = Job.objects.all().filter(
+        ~Q(user=user), Q(is_assigned=False), Q(is_completed=False)
+    )
 
     context = {
         "user": user,
@@ -155,7 +165,7 @@ def job_bid(request, job_id):
     form = JobBidForm(user=user, initial={"bid": 0.0})
     job = Job.objects.get(pk=job_id)
     if request.method == "POST":
-        form = JobBidForm(request.POST, user=user)
+        form = JobBidForm(request.POST, user=user, job=job)
         if form.is_valid():
             job_bid = JobBid.objects.create(
                 bid_user=user, job=job, bid=form.cleaned_data.get("bid")
@@ -234,3 +244,44 @@ def complete_job(request, user_id, job_id):
             "form": form,
         }
     return render(request, "app/complete_job.html", context)
+
+
+def job_status(request, job_id):
+    job = get_object_or_404(Job, pk=job_id)
+    context = {
+        "job": job,
+    }
+    return render(request, "app/job_status.html", context)
+
+
+def dispute_job(request, job_id):
+    user = request.user
+    job = get_object_or_404(Job, pk=job_id)
+    form = DisputeJobForm(instance=job)
+
+    context = {
+        "job": job,
+        "user": user,
+        "form": form,
+    }
+
+    if request.method == "POST":
+        form = DisputeJobForm(request.POST, instance=job)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("app:dashboard", args=[]))
+        else:
+            context = {
+                "job": job,
+                "user": user,
+                "form": form,
+            }
+            return render(request, "app/dispute_job.html", context)
+    else:
+        form = DisputeJobForm(instance=job)
+        context = {
+            "job": job,
+            "user": user,
+            "form": form,
+        }
+    return render(request, "app/dispute_job.html", context)
