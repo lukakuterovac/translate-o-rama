@@ -46,6 +46,10 @@ class JobForm(ModelForm):
             "text": forms.Textarea(attrs={"class": "form-control"}),
         }
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
+        super(JobForm, self).__init__(*args, **kwargs)
+
     def clean(self):
         errors = []
         if (
@@ -65,6 +69,8 @@ class JobForm(ModelForm):
         if "budget" in self.cleaned_data:
             if self.cleaned_data["budget"] <= 0:
                 errors.append(ValidationError("Budget must be greater than 0!"))
+            if self.cleaned_data["budget"] > self.user.userprofile.token_balance:
+                errors.append(ValidationError("User doesn't have enough tokens!"))
         else:
             errors.append(ValidationError("Budget field empty"))
 

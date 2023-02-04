@@ -126,12 +126,13 @@ def change_password(request, user_id):
 
 
 def post_job(request):
+    user = request.user
     form = JobForm(initial={"job_field": "ART"})
     if request.method == "POST":
-        form = JobForm(request.POST)
+        form = JobForm(request.POST, user=user)
         if form.is_valid():
             job_post = Job.objects.create(
-                user=request.user,
+                user=user,
                 title=form.cleaned_data.get("title"),
                 description=form.cleaned_data.get("description"),
                 source_language=form.cleaned_data.get("source_language"),
