@@ -1,7 +1,19 @@
 {% extends 'app/base.html' %}
 {% block content %}
-        <p>
-            WELCOME
-        </p>
-        
+        <h3>Translators</h3>
+        {% for translator in translators %}
+                {% include 'includes/user_card.html' with user=translator %}
+                {% empty %}
+                <div class="row">
+                No jobs posted.
+                </div>
+        {% endfor %}
+        <h3>Available jobs</h3>
+        {% for job in available_jobs %}
+                {% include 'includes/job_card.html' with job=job %}
+                {% empty %}
+                <div class="row">
+                        No jobs posted.
+                </div>
+        {% endfor %}
 {% endblock content %}

@@ -8,13 +8,18 @@ from django.shortcuts import redirect
 from .forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-from .models import Job, Message, JobBid
+from .models import Job, Message, JobBid, UserProfile
 from .forms import JobForm, MessageForm, JobBidForm
 from django.db.models import Q
 
 
 def home(request):
-    context = {}
+    translators = UserProfile.objects.filter(Q(is_translator=True))
+    available_jobs = Job.objects.filter(Q(is_assigned=False), Q(is_completed=False))
+    context = {
+        "translators": translators,
+        "available_jobs": available_jobs,
+    }
     return render(request, "app/home.html", context)
 
 
