@@ -209,13 +209,13 @@ def message_user(request, job_id):
 
 
 def accept_job(request, bid_id):
-    if request.method == "POST":
-        bid = get_object_or_404(JobBid, pk=bid_id)
-        job = get_object_or_404(Job, pk=bid.job.id)
-        job.assigned_to = bid
-        job.is_assigned = True
-        job.save()
-        return HttpResponseRedirect(reverse("app:dashboard", args=[]))
+    bid = get_object_or_404(JobBid, pk=bid_id)
+    job = get_object_or_404(Job, pk=bid.job.id)
+    job.assigned_to = bid
+    job.is_assigned = True
+    job.translator = bid.bid_user
+    job.save()
+    return HttpResponseRedirect(reverse("app:dashboard", args=[]))
 
 
 def job_status(request, job_id):
