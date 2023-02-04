@@ -11,6 +11,7 @@ from django.template import RequestContext
 from .models import Job, Message, JobBid
 from .forms import JobForm, MessageForm, JobBidForm
 from django.db.models import Q
+from django.contrib.auth.models import User
 
 
 def home(request):
@@ -201,3 +202,11 @@ def message_user(request, job_id):
         form = MessageForm()
         context = {"user": user, "job": job, "form": form}
     return render(request, "app/message_page.html", context)
+
+
+def job_status(request, job_id):
+    job = get_object_or_404(Job, pk=job_id)
+    context = {
+        "job": job,
+    }
+    return render(request, "app/job_status.html", context)
