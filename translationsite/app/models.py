@@ -16,11 +16,14 @@ class UserProfile(models.Model):
     def __str__(self) -> str:
         return f"{self.user.username}: {self.token_balance}"
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        profile, created = UserProfile.objects.get_or_create(user=instance)
+        UserProfile.objects.create(user=instance)
 
 
 @receiver(post_save, sender=User)

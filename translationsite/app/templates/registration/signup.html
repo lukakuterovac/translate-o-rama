@@ -8,8 +8,12 @@
       <form method="post" accept-charset="utf-8">
         {% csrf_token %}
         
-        {% include 'includes/bs_form.html' with form=form %}
-        
+        {% include 'includes/bs_form.html' with form=signup_form %}
+
+        <div class="form-check text-center my-3">
+          {{ profile_form }}
+        </div>
+
         <div class="row mt-4 text-center">
           <div class="col-md-12 ms-2 mb-5">
             <input type="submit" value="Sign up" class="custom-btn btn px-4 py-2">
