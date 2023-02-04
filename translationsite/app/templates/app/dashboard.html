@@ -17,18 +17,23 @@
   <div class="mb-5">
     {% for job in jobs %}
       {% include 'includes/job_card.html' with job=job %}
-      {% for bid in bids %}
-        {% if bid.job == job %}
-          <div class="row my-3">
-            <h5 class="col-3 d-block"><a href="#">{{ bid.bid_user }}</a>: {{ bid.bid }}</h5>
-            <button type="button" class="btn btn-primary col-1 ms-5" href="{% url 'app:assign_job' bid.id %}">Assign</button>
-            
-          </div>
-        {% endif %} 
-      {% endfor %}
-      {% if job.is_completed %}
-          <a href="{% url 'app:dispute_job' job.id %}" class="btn btn-primary  mx-auto">Dispute</a>
-      
+      {% if job.is_assigned %}
+        Assigned to <a href="{% url 'app:profile' job.assigned_to.bid_user.id %}">{{ job.assigned_to.bid_user.username }}</a>
+        {% if job.is_completed %}
+          <a href="{% url 'app:dispute_job' job.id %}" class="btn btn-primary mx-auto">Dispute</a>
+        {% endif %}
+      {% else %}
+        {% for bid in bids %}
+          {% if bid.job == job %}
+            <div class="row my-3">
+              <h5 class="col-3 d-block"><a href="#">{{ bid.bid_user }}</a>: {{ bid.bid }}</h5>
+              <form action="{% url 'app:accept_job' bid.id %}" class="col-3" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary col-3">Assign</button>
+              </form>
+            </div>
+          {% endif %} 
+        {% endfor %}
       {% endif %}
     {% empty %}
       <div class="row">
