@@ -299,7 +299,11 @@ def dispute_job(request, job_id):
 
 def job_rating(request, job_id, new_rating):
     job = get_object_or_404(Job, pk=job_id)
+    translator = job.translator
     rating = Rating.objects.filter(job=job).first()
-    rating.rating = new_rating
-    rating.save()
+    if rating:
+        rating.rating = new_rating
+        rating.save()
+    else:
+        Rating.objects.create(job=job, translator=translator, rating=new_rating)
     return HttpResponseRedirect(reverse("app:job_status", args=[job_id]))
