@@ -279,3 +279,11 @@ def dispute_job(request, job_id):
             "form": form,
         }
     return render(request, "app/dispute_job.html", context)
+
+
+def view_translation(request, job_id):
+    job = get_object_or_404(Job, pk=job_id)
+    context = {
+        "job": job,
+    }
+    return render(request, "app/view_translation.html", context)
