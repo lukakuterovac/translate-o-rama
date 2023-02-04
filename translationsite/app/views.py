@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from .models import Job
 from .forms import JobForm, EmailChangeForm
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -9,7 +10,10 @@ from .forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from .models import Job, Message, JobBid, Rating
-from .forms import JobForm, MessageForm, JobBidForm, CompleteJobForm, DisputeJobForm
+from .forms import JobForm, JobBidForm, MessageForm, CompleteJobForm, DisputeJobForm
+from django.contrib.auth.models import User
+from django.db.models import Q
+from .forms import JobForm, MessageForm, JobBidForm, DisputeJobForm
 from django.db.models import Q
 from django.contrib.auth.models import User
 
@@ -238,6 +242,16 @@ def complete_job(request, user_id, job_id):
             "form": form,
         }
     return render(request, "app/complete_job.html", context)
+
+
+def accept_job(request, bid_id):
+    bid = get_object_or_404(JobBid, pk=bid_id)
+    job = get_object_or_404(Job, pk=bid.job.id)
+    job.assigned_to = bid
+    job.is_assigned = True
+    job.translator = bid.bid_user
+    job.save()
+    return HttpResponseRedirect(reverse("app:dashboard", args=[]))
 
 
 def job_status(request, job_id):

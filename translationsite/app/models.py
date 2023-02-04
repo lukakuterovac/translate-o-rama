@@ -83,6 +83,13 @@ class Job(models.Model):
     )
     budget = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     text = models.TextField(blank=False)
+    assigned_to = models.ForeignKey(
+        "JobBid",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="assigned_to",
+    )
     is_assigned = models.BooleanField(default=False)
     is_completed = models.BooleanField(default=False)
 
