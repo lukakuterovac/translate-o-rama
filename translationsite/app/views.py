@@ -5,12 +5,13 @@ from .forms import JobForm, EmailChangeForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import redirect
-from .forms import SetPasswordForm, FilterJobsForm
+from .forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from .models import Job, Message, JobBid, UserProfile, JobField
-from .forms import JobForm, MessageForm, JobBidForm
+from .forms import JobForm, MessageForm, JobBidForm, DisputeJobForm
 from django.db.models import Q
+from django.contrib.auth.models import User
 
 
 def home(request):
@@ -159,12 +160,13 @@ def change_password(request, user_id):
 
 
 def post_job(request):
+    user = request.user
     form = JobForm(initial={"job_field": "ART"})
     if request.method == "POST":
-        form = JobForm(request.POST)
+        form = JobForm(request.POST, user=user)
         if form.is_valid():
             job_post = Job.objects.create(
-                user=request.user,
+                user=user,
                 title=form.cleaned_data.get("title"),
                 description=form.cleaned_data.get("description"),
                 source_language=form.cleaned_data.get("source_language"),
@@ -197,7 +199,7 @@ def job_bid(request, job_id):
     form = JobBidForm(user=user, initial={"bid": 0.0})
     job = Job.objects.get(pk=job_id)
     if request.method == "POST":
-        form = JobBidForm(request.POST, user=user)
+        form = JobBidForm(request.POST, user=user, job=job)
         if form.is_valid():
             job_bid = JobBid.objects.create(
                 bid_user=user, job=job, bid=form.cleaned_data.get("bid")
@@ -235,3 +237,44 @@ def message_user(request, job_id):
         form = MessageForm()
         context = {"user": user, "job": job, "form": form}
     return render(request, "app/message_page.html", context)
+
+
+def job_status(request, job_id):
+    job = get_object_or_404(Job, pk=job_id)
+    context = {
+        "job": job,
+    }
+    return render(request, "app/job_status.html", context)
+
+
+def dispute_job(request, job_id):
+    user = request.user
+    job = get_object_or_404(Job, pk=job_id)
+    form = DisputeJobForm(instance=job)
+
+    context = {
+        "job": job,
+        "user": user,
+        "form": form,
+    }
+
+    if request.method == "POST":
+        form = DisputeJobForm(request.POST, instance=job)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("app:dashboard", args=[]))
+        else:
+            context = {
+                "job": job,
+                "user": user,
+                "form": form,
+            }
+            return render(request, "app/dispute_job.html", context)
+    else:
+        form = DisputeJobForm(instance=job)
+        context = {
+            "job": job,
+            "user": user,
+            "form": form,
+        }
+    return render(request, "app/dispute_job.html", context)

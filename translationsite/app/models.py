@@ -16,11 +16,14 @@ class UserProfile(models.Model):
     def __str__(self) -> str:
         return f"{self.user.username}: {self.token_balance}"
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        profile, created = UserProfile.objects.get_or_create(user=instance)
+        UserProfile.objects.create(user=instance)
 
 
 @receiver(post_save, sender=User)
@@ -81,6 +84,8 @@ class Job(models.Model):
         null=True,
         related_name="set_as_translator_of_job",
     )
+
+    dispute = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.id}-{self.title[:30]}-{self.description[:100]}-{self.source_language[:15]}-{self.target_language[:15]}-{self.job_field}-{self.budget}-{self.text}"

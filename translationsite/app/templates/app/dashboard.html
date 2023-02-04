@@ -20,14 +20,21 @@
       {% for bid in bids %}
         {% if bid.job == job %}
           <div class="row my-3">
-            <h5 class="col-3 d-block"><a href="#">{{ bid.bid_user }}</a>: {{ bid.bid }}</h5><button type="button" class="btn btn-primary col-1 ms-5">Assign</button>
+            <h5 class="col-3 d-block"><a href="#">{{ bid.bid_user }}</a>: {{ bid.bid }}</h5>
+            <button type="button" class="btn btn-primary col-1 ms-5">Assign</button>
+            
           </div>
-        {% endif %}
+        {% endif %} 
       {% endfor %}
+      {% if job.is_completed %}
+          <a href="{% url 'app:dispute_job' job.id %}" class="btn btn-primary  mx-auto">Dispute</a>
+      
+      {% endif %}
     {% empty %}
       <div class="row">
         No jobs posted.
       </div>
+      
     {% endfor %}
   </div>
   

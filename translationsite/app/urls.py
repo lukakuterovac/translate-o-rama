@@ -17,4 +17,6 @@ urlpatterns = [
     path("jobs", views.jobs, name="jobs"),
     path("jobs/job_bid/<int:job_id>", views.job_bid, name="jobs_bid"),
     path("jobs/<int:job_id>", views.message_user, name="message_user"),
+    path("dashboard/job_status/<int:job_id>", views.job_status, name="job_status"),
+    path("dashboard/dispute/<int:job_id>", views.dispute_job, name="dispute_job"),
 ]

@@ -4,6 +4,7 @@ from django.contrib.auth.forms import SetPasswordForm, UserChangeForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from .models import Job, UserProfile
 from django import forms
 
 
@@ -45,6 +46,10 @@ class JobForm(ModelForm):
             "text": forms.Textarea(attrs={"class": "form-control"}),
         }
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
+        super(JobForm, self).__init__(*args, **kwargs)
+
     def clean(self):
         errors = []
         if (
@@ -64,6 +69,8 @@ class JobForm(ModelForm):
         if "budget" in self.cleaned_data:
             if self.cleaned_data["budget"] <= 0:
                 errors.append(ValidationError("Budget must be greater than 0!"))
+            if self.cleaned_data["budget"] > self.user.userprofile.token_balance:
+                errors.append(ValidationError("User doesn't have enough tokens!"))
         else:
             errors.append(ValidationError("Budget field empty"))
 
@@ -152,12 +159,13 @@ class JobBidForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user", None)
+        self.job = kwargs.pop("job", None)
         super(JobBidForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         if "bid" in self.cleaned_data:
-            if self.cleaned_data["bid"] > self.user.userprofile.token_balance:
-                raise ValidationError("User doesn't have enough tokens!")
+            if self.cleaned_data["bid"] > self.job.budget:
+                raise ValidationError("Bid is higher than budget!")
         return self.cleaned_data
 
 
@@ -169,20 +177,22 @@ class MessageForm(ModelForm):
         ]
 
 
-class FilterJobsForm(ModelForm):
+class DisputeJobForm(ModelForm):
     class Meta:
         model = Job
         fields = [
-            "job_field",
-            "target_language",
+            "dispute",
         ]
-        widgets = {
-            "job_field": forms.Select(attrs={"class": "form-control"}),
-            "target_language": forms.TextInput(attrs={"class": "form-control"}),
-        }
 
     def clean(self):
-        if "bid" in self.cleaned_data:
-            if self.cleaned_data["bid"] > self.user.userprofile.token_balance:
-                raise ValidationError("User doesn't have enough tokens!")
+        if "dispute" in self.cleaned_data:
+            if self.cleaned_data["dispute"] == "":
+                raise ValidationError("You have to fill in this field!")
         return self.cleaned_data
+
+    def save(self, commit=True):
+        dispute = self.cleaned_data["dispute"]
+        self.instance.dispute = dispute
+        if commit:
+            self.instance.save()
+        return self.instance

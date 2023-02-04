@@ -1,0 +1,33 @@
+{% extends 'app/base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<h1 class="text-center mb-5 mt-3">Dispute job</h1>
+<div class="content-section mt-5 mb-5 p-2 ">
+	<div class="container w-50 mb-5 justify-content-center">
+		<div class="ms-5">
+			<p><b>Title:</b> {{job.title}}</p>
+			<p><b>Description:</b> {{job.description}}</p>
+            <p><b>Source language:</b> {{job.source_language}}</p>      
+			<p><b>Text for translation:</b> {{job.text}}</p>
+            <p><b>Posted by:</b> {{job.user}}</p> 
+            <hr>     
+            <p><b>Target language:</b> {{job.target_language}}</p>   
+            <p><b>Translation:</b> {{job.translation}}</p> 
+            <p><b>Completed by:</b> {{job.translator}}</p>     
+		</div>
+
+	</div>
+	<form action="{% url 'app:dispute_job' job.id %}" method="POST">
+		{% csrf_token %}
+		{% include 'includes/job_form.html' with form=form %}
+   
+		<div class="row mt-4 text-center mb-5">
+            <div clss="col-md-8 ms-2">
+				<button class="btn custom-btn" type="submit">Submit</button>
+			</div>
+		</div>
+    </form>
+</div>
+{% endblock content %}
