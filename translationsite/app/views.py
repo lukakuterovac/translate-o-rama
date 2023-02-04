@@ -8,7 +8,7 @@ from django.shortcuts import redirect
 from .forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-from .models import Job, Message, JobBid
+from .models import Job, Message, JobBid, Rating
 from .forms import JobForm, MessageForm, JobBidForm, CompleteJobForm, DisputeJobForm
 from django.db.models import Q
 from django.contrib.auth.models import User
@@ -54,7 +54,7 @@ def profile(request, user_id):
     email_form = EmailChangeForm(user)
     password_form = SetPasswordForm(user)
     accepted_jobs = Job.objects.filter(
-        Q(user=user_from_job), Q(is_assigned=True)
+        Q(user=user_from_job), Q(is_assigned=True), Q(is_completed=False)
     )  # jobs that are from user
     completed_jobs = Job.objects.filter(Q(user=user_from_job), Q(is_completed=True))
 
@@ -65,6 +65,7 @@ def profile(request, user_id):
     translator_completed_jobs = Job.objects.filter(
         Q(translator=user_from_job), Q(is_completed=True)
     )
+    rating = user_from_job.userprofile.average_rating()
 
     context = {
         "user": user,
@@ -76,6 +77,7 @@ def profile(request, user_id):
         "translator_bids": translators_bid,
         "translator_assigned_jobs": translator_assigned_jobs,
         "translator_completed_jobs": translator_completed_jobs,
+        "rating": rating,
     }
     return render(request, "app/profile.html", context)
 
@@ -240,8 +242,10 @@ def complete_job(request, user_id, job_id):
 
 def job_status(request, job_id):
     job = get_object_or_404(Job, pk=job_id)
+    rating = Rating.objects.filter(job=job).first()
     context = {
         "job": job,
+        "rating": rating.rating if rating else 0,
     }
     return render(request, "app/job_status.html", context)
 
@@ -277,3 +281,11 @@ def dispute_job(request, job_id):
             "form": form,
         }
     return render(request, "app/dispute_job.html", context)
+
+
+def job_rating(request, job_id, new_rating):
+    job = get_object_or_404(Job, pk=job_id)
+    rating = Rating.objects.filter(job=job).first()
+    rating.rating = new_rating
+    rating.save()
+    return HttpResponseRedirect(reverse("app:job_status", args=[job_id]))

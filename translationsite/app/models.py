@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django import forms
 from django.forms import ModelForm
+from django.db.models import Avg
 import datetime
 
 
@@ -18,6 +19,14 @@ class UserProfile(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+
+    def average_rating(self) -> float:
+        return (
+            Rating.objects.filter(translator=self.user).aggregate(Avg("rating"))[
+                "rating__avg"
+            ]
+            or 0
+        )
 
 
 @receiver(post_save, sender=User)
@@ -114,3 +123,12 @@ class JobBid(models.Model):
 
     def __str__(self) -> str:
         return f"{self.bid_user} on {self.job.title}: {self.bid} token(s)"
+
+
+class Rating(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    translator = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField(default=0)
+
+    def __str__(self) -> str:
+        return f"{self.id} {self.job.title},{self.translator.username}: {self.rating}"

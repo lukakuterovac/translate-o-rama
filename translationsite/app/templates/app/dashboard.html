@@ -17,6 +17,7 @@
   <div class="mb-5">
     {% for job in jobs %}
       {% include 'includes/job_card.html' with job=job %}
+      <a href="{% url 'app:job_status' job.id %}" class="btn btn-primary col-2">View status</a>
       {% for bid in bids %}
         {% if bid.job == job %}
           <div class="row my-3">
