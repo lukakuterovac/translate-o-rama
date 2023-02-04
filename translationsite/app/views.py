@@ -5,7 +5,7 @@ from .forms import JobForm, EmailChangeForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import redirect
-from .forms import SetPasswordForm
+from .forms import SetPasswordForm, FilterJobsForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from .models import Job, Message, JobBid, UserProfile
@@ -14,13 +14,36 @@ from django.db.models import Q
 
 
 def home(request):
+    user = request.user
     translators = UserProfile.objects.filter(Q(is_translator=True))
     available_jobs = Job.objects.filter(Q(is_assigned=False), Q(is_completed=False))
+    filter_form = FilterJobsForm()
+
+    job_field_query = filter_form.cleaned_data.get("job_field")
+    target_language_query = filter_form.cleaned_data.get("target_language")
+    source_language_query = filter_form.cleaned_data.get("target_language")
+
+    if job_field_query != "" and job_field_query is not None:
+        available_jobs = available_jobs.filter(job_field__icontains=job_field_query)
+    elif target_language_query != "" and target_language_query is not None:
+        available_jobs = available_jobs.filter(
+            Q(target_language__icontains=target_language_query)
+            | Q(source_language__icontains=source_language_query)
+        )
+    else:
+        available_jobs = available_jobs.filter(
+            Q(job_field__icontains=job_field_query)
+            | Q(target_language__icontains=target_language_query)
+            | Q(source_language__icontains=source_language_query)
+        )
+
     context = {
         "translators": translators,
         "available_jobs": available_jobs,
-        "user": request.user,
+        "user": user,
+        "filter_form": filter_form,
     }
+
     return render(request, "app/home.html", context)
 
 

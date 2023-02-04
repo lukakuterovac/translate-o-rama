@@ -167,3 +167,16 @@ class MessageForm(ModelForm):
         fields = [
             "text",
         ]
+
+
+class FilterJobsForm(ModelForm):
+    class Meta:
+        model = Job
+        fields = [
+            "job_field",
+            "target_language",
+        ]
+        widgets = {
+            "job_field": forms.Select(attrs={"class": "form-control"}),
+            "target_language": forms.TextInput(attrs={"class": "form-control"}),
+        }

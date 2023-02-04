@@ -9,6 +9,18 @@
                 </div>
         {% endfor %}
         <h3 class="text-center mt-5">Available jobs</h3>
+
+        <div class="row mx-auto mt-5">
+                <form action="{% url 'home_path' %}" >
+                        {% csrf_token %}
+                        
+                        {% include 'includes/job_form.html' with form=filter_form %}
+                <div class="mx-auto text-center">
+                        <button class="btn custom-btn " type="submit">Search</button>
+                </div>
+                        
+                </form>
+        </div>
         {% for job in available_jobs %}
                 {% include 'includes/unassigned_jobs.html' with job=job user=user %}
                 {% empty %}
