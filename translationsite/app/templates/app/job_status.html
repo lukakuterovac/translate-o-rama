@@ -1,0 +1,18 @@
+{% extends 'app/base.html' %}
+{% block content %}
+  <div class="mx-2">
+    <h4>{{ job.title }}
+      {% if job.is_assigned %}
+        {% if job.is_completed %}
+          <div class="badge bg-success">Completed</div>
+        {% else %}
+          <div class="badge bg-primary">Assigned</div>
+        {% endif %}
+      {% else %}
+        <div class="badge bg-secondary">Unassigned</div>
+      {% endif %}
+    </h4>
+    <div class="mb-2 text-muted">Budget: {{ job.budget }} token(s)</div>
+    <div class="">{{ job.description }}</div>
+  </div>
+{% endblock content %}

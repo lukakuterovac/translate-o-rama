@@ -120,3 +120,11 @@ def post_job(request):
     else:
         form = JobForm()
     return render(request, "app/post_job.html", {"form": form})
+
+
+def job_status(request, job_id):
+    job = get_object_or_404(Job, pk=job_id)
+    context = {
+        "job": job,
+    }
+    return render(request, "app/job_status.html", context)
