@@ -1,0 +1,15 @@
+{% extends 'app/base.html' %}
+{% block content %}
+  <div class="m-4">
+    <h3 class="text-center"><b>{{ job.title }}</b></h3>
+    <h4 class="my-2">Description: {{ job.description }}</h4>
+    <div class="row mt-5">
+      <h5 class="col-6"><b>Text</b></h5>
+      <h5 class="col-6"><b>Translation</b></h5>
+    </div>
+    <div class="row mt-2">
+      <h5 class="col-6">{{ job.text }}</h5>
+      <h5 class="col-6">{{ job.translation }}</h5>
+    </div>
+  </div>
+{% endblock %}

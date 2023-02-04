@@ -1,0 +1,7 @@
+<div class="card mt-5 w-75 mx-auto">
+    <div class="card-body m-2">
+      <h4 class="card-title">{{ user.user.username }}</h4>
+      <div class="card-subtitle mb-2 text-muted">Email: {{ user.user.email }} </div>
+      <div class="card-text"><a href="{% url 'app:profile' user.user.id %}">Show profile</a></div> 
+    </div>
+  </div>

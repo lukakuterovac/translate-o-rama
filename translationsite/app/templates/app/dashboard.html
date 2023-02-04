@@ -18,12 +18,17 @@
     {% for job in jobs %}
       {% include 'includes/job_card.html' with job=job %}
       <a href="{% url 'app:job_status' job.id %}" class="btn btn-primary col-2">View status</a>
+      
       {% if job.is_assigned %}
         Assigned to <a href="{% url 'app:profile' job.assigned_to.bid_user.id %}">{{ job.assigned_to.bid_user.username }}</a>
+        
         {% if job.is_completed %}
           <a href="{% url 'app:dispute_job' job.id %}" class="btn btn-primary mx-auto">Dispute</a>
+          <a href="{% url 'app:view_translation' job.id %}" class="btn btn-primary mx-2">View translation</a>
         {% endif %}
+
       {% else %}
+
         {% for bid in bids %}
           {% if bid.job == job %}
             <div class="row my-3">
@@ -35,12 +40,12 @@
             </div>
           {% endif %} 
         {% endfor %}
-      {% endif %}
-    {% empty %}
+
+      {% empty %}
       <div class="row">
         No jobs posted.
       </div>
-      
+        
     {% endfor %}
   </div>
   

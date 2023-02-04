@@ -9,7 +9,7 @@ from django.shortcuts import redirect
 from .forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-from .models import Job, Message, JobBid, Rating
+from .models import Job, Message, JobBid, Rating, UserProfile, JobField
 from .forms import JobForm, JobBidForm, MessageForm, CompleteJobForm, DisputeJobForm
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -19,7 +19,42 @@ from django.contrib.auth.models import User
 
 
 def home(request):
-    context = {}
+    user = request.user
+    translators = UserProfile.objects.filter(Q(is_translator=True))
+    available_jobs = Job.objects.filter(Q(is_assigned=False), Q(is_completed=False))
+    job_fields = JobField.objects.all()
+
+    job_field_query = request.GET.get("job_field")
+    target_language_query = request.GET.get("target_language")
+    source_language_query = request.GET.get("target_language")
+
+    if (
+        target_language_query != ""
+        and target_language_query is not None
+        and job_field_query != ""
+        and job_field_query is not None
+    ):
+        available_jobs = available_jobs.filter(
+            Q(job_field__icontains=job_field_query),
+            Q(target_language__icontains=target_language_query)
+            | Q(source_language__icontains=source_language_query),
+        ).distinct()
+
+    elif target_language_query != "" and target_language_query is not None:
+        available_jobs = available_jobs.filter(
+            Q(target_language__icontains=target_language_query)
+            | Q(source_language__icontains=source_language_query)
+        )
+    elif job_field_query != "" and job_field_query is not None:
+        available_jobs = available_jobs.filter(job_field__icontains=job_field_query)
+
+    context = {
+        "translators": translators,
+        "available_jobs": available_jobs,
+        "user": user,
+        "job_fields": job_fields,
+    }
+
     return render(request, "app/home.html", context)
 
 
@@ -307,3 +342,11 @@ def job_rating(request, job_id, new_rating):
     else:
         Rating.objects.create(job=job, translator=translator, rating=new_rating)
     return HttpResponseRedirect(reverse("app:job_status", args=[job_id]))
+
+
+def view_translation(request, job_id):
+    job = get_object_or_404(Job, pk=job_id)
+    context = {
+        "job": job,
+    }
+    return render(request, "app/view_translation.html", context)

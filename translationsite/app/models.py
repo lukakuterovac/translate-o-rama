@@ -41,18 +41,18 @@ def save_user_profile(sender, instance, **kwargs):
 
 
 class JobField(models.Model):
-    ART = "A"
-    BUSINESS = "B"
-    COMPUTERS = "C"
-    EDUCATION = "ED"
-    ENGINEERING = "ENG"
-    FINANCE = "F"
-    LAW = "L"
-    LITERATURE = "LIT"
-    MEDICINE = "M"
-    SCIENCE = "SC"
-    SOCIALSCI = "SS"
-    TECHNOLOGY = "TECH"
+    ART = "Art"
+    BUSINESS = "Business"
+    COMPUTERS = "Computers"
+    EDUCATION = "Education"
+    ENGINEERING = "Engineering"
+    FINANCE = "Finance"
+    LAW = "Law"
+    LITERATURE = "Literature"
+    MEDICINE = "Medicine"
+    SCIENCE = "Science"
+    SOCIALSCI = "Social Sciences"
+    TECHNOLOGY = "Technology"
 
     JOB_CHOICES = [
         (ART, "Art"),
@@ -77,7 +77,7 @@ class Job(models.Model):
     source_language = models.TextField(blank=False)
     target_language = models.TextField(blank=False)
     job_field = models.CharField(
-        max_length=4,
+        max_length=15,
         choices=JobField.JOB_CHOICES,
         default=JobField.LITERATURE,
     )
@@ -103,6 +103,7 @@ class Job(models.Model):
 
     translation = models.TextField(blank=True, null=True)
     dispute = models.TextField(blank=True, null=True)
+    translation = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.id}-{self.title[:30]}-{self.description[:100]}-{self.source_language[:15]}-{self.target_language[:15]}-{self.job_field}-{self.budget}-{self.text}"
