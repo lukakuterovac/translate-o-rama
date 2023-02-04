@@ -164,7 +164,7 @@ def job_bid(request, job_id):
     form = JobBidForm(user=user, initial={"bid": 0.0})
     job = Job.objects.get(pk=job_id)
     if request.method == "POST":
-        form = JobBidForm(request.POST, user=user)
+        form = JobBidForm(request.POST, user=user, job=job)
         if form.is_valid():
             job_bid = JobBid.objects.create(
                 bid_user=user, job=job, bid=form.cleaned_data.get("bid")
