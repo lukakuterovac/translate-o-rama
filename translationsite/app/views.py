@@ -24,24 +24,25 @@ def home(request):
     target_language_query = request.GET.get("target_language")
     source_language_query = request.GET.get("target_language")
 
-    if job_field_query != "" and job_field_query is not None:
-        available_jobs = available_jobs.filter(job_field__icontains=job_field_query)
-    elif target_language_query != "" and target_language_query is not None:
-        available_jobs = available_jobs.filter(
-            Q(target_language__icontains=target_language_query)
-            | Q(source_language__icontains=source_language_query)
-        )
-    elif (
+    if (
         target_language_query != ""
         and target_language_query is not None
         and job_field_query != ""
         and job_field_query is not None
     ):
         available_jobs = available_jobs.filter(
-            Q(job_field__icontains=job_field_query)
-            | Q(target_language__icontains=target_language_query)
-            | Q(source_language__icontains=source_language_query)
+            Q(job_field__icontains=job_field_query),
+            Q(target_language__icontains=target_language_query)
+            | Q(source_language__icontains=source_language_query),
         ).distinct()
+
+    elif target_language_query != "" and target_language_query is not None:
+        available_jobs = available_jobs.filter(
+            Q(target_language__icontains=target_language_query)
+            | Q(source_language__icontains=source_language_query)
+        )
+    elif job_field_query != "" and job_field_query is not None:
+        available_jobs = available_jobs.filter(job_field__icontains=job_field_query)
 
     context = {
         "translators": translators,
