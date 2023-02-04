@@ -21,4 +21,4 @@ class UserProfileSignupForm(ModelForm):
     class Meta:
         model = UserProfile
         fields = ["is_translator"]
-        widgets = {"is_translator": Select(choices=CHOICES)}
+        widgets = {"is_translator": CheckboxInput(attrs={"class": "checkbox-inline"})}
