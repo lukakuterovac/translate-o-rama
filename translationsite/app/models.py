@@ -19,7 +19,7 @@ class UserProfile(models.Model):
 
     def average_rating(self) -> float:
         return (
-            Rating.objects.filter(translator=self).aggregate(Avg("rating"))[
+            Rating.objects.filter(translator=self.user).aggregate(Avg("rating"))[
                 "rating__avg"
             ]
             or 0
@@ -125,4 +125,4 @@ class Rating(models.Model):
     rating = models.IntegerField(default=0)
 
     def __str__(self) -> str:
-        return f"{self.job.title},{self.translator.username}: {self.rating}"
+        return f"{self.id} {self.job.title},{self.translator.username}: {self.rating}"

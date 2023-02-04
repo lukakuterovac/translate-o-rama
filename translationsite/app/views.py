@@ -68,6 +68,7 @@ def profile(request, user_id):
     translator_completed_jobs = Job.objects.filter(
         Q(translator=user_from_job), Q(is_completed=True)
     )
+    rating = user_from_job.userprofile.average_rating()
 
     context = {
         "user": user,
@@ -79,6 +80,7 @@ def profile(request, user_id):
         "translator_bids": translators_bid,
         "translator_assigned_jobs": translator_assigned_jobs,
         "translator_completed_jobs": translator_completed_jobs,
+        "rating": rating,
     }
     return render(request, "app/profile.html", context)
 
@@ -217,8 +219,9 @@ def job_status(request, job_id):
     return render(request, "app/job_status.html", context)
 
 
-def job_rating(request, job_id, rating):
+def job_rating(request, job_id, new_rating):
     job = get_object_or_404(Job, pk=job_id)
-    Rating.objects.filter(job=job).delete()
-    Rating.objects.create(job=job, translator=job.translator, rating=rating).save()
+    rating = Rating.objects.filter(job=job).first()
+    rating.rating = new_rating
+    rating.save()
     return HttpResponseRedirect(reverse("app:job_status", args=[job_id]))

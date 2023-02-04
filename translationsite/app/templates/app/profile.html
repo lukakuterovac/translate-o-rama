@@ -1,11 +1,47 @@
 {% extends 'app/base.html' %}
 {% block content %}
- 
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <meta charset="UTF-8">
+</head>
+<body>
+    <style>
+        .rating-list li {
+          float: right;
+          color: #ddd;
+          padding: 10px 5px;
+        }
+
+        .rating-list li:hover,
+        .rating-list li:hover ~ li {
+          color: orange;
+        }
+
+        .rating-list {
+          display: inline-block;
+          list-style: none;
+        }
+        .checked {
+            color: orange;
+        }
+    </style>
     <h1 class="text-center mb-5 mt-3">User profile</h1>
 
     <h5 class="mb-3"><b>Username:</b>{{ user_from_jobs.username }}</h5>
 
     <h5 class="mb-3"><b>Email address:</b> {{ user_from_jobs.email }}</h5>
+
+    {% if user_from_jobs.userprofile.is_translator %}
+        <h5 class="mb-3"><b>Avg rating:</b>
+            <span class="bi bi-star-fill {% if rating > 0 %} checked {% endif %}"></span>
+            <span class="bi bi-star-fill {% if rating > 1 %} checked {% endif %}"></span>
+            <span class="bi bi-star-fill {% if rating > 2 %} checked {% endif %}"></span>
+            <span class="bi bi-star-fill {% if rating > 3 %} checked {% endif %}" ></span>
+            <span class="bi bi-star-fill {% if rating > 4 %} checked {% endif %}"></span>
+        </h5>
+    {% endif %}
 
     <h5 class="mb-3"><b>Accepted jobs:</b></h5>
     {% for accepted_job in accepted_jobs %}
@@ -56,4 +92,5 @@
         {% endfor %}
 
     {% endif %}
+</body>
 {% endblock %}
