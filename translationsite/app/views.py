@@ -57,7 +57,7 @@ def profile(request, user_id):
     email_form = EmailChangeForm(user)
     password_form = SetPasswordForm(user)
     accepted_jobs = Job.objects.filter(
-        Q(user=user_from_job), Q(is_assigned=True)
+        Q(user=user_from_job), Q(is_assigned=True), Q(is_completed=False)
     )  # jobs that are from user
     completed_jobs = Job.objects.filter(Q(user=user_from_job), Q(is_completed=True))
 
