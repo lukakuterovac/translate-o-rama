@@ -180,3 +180,9 @@ class FilterJobsForm(ModelForm):
             "job_field": forms.Select(attrs={"class": "form-control"}),
             "target_language": forms.TextInput(attrs={"class": "form-control"}),
         }
+
+    def clean(self):
+        if "bid" in self.cleaned_data:
+            if self.cleaned_data["bid"] > self.user.userprofile.token_balance:
+                raise ValidationError("User doesn't have enough tokens!")
+        return self.cleaned_data

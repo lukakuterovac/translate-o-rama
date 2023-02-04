@@ -8,7 +8,7 @@ from django.shortcuts import redirect
 from .forms import SetPasswordForm, FilterJobsForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-from .models import Job, Message, JobBid, UserProfile
+from .models import Job, Message, JobBid, UserProfile, JobField
 from .forms import JobForm, MessageForm, JobBidForm
 from django.db.models import Q
 
@@ -17,11 +17,11 @@ def home(request):
     user = request.user
     translators = UserProfile.objects.filter(Q(is_translator=True))
     available_jobs = Job.objects.filter(Q(is_assigned=False), Q(is_completed=False))
-    filter_form = FilterJobsForm()
+    job_fields = JobField.objects.all()
 
-    job_field_query = filter_form.cleaned_data.get("job_field")
-    target_language_query = filter_form.cleaned_data.get("target_language")
-    source_language_query = filter_form.cleaned_data.get("target_language")
+    job_field_query = request.GET.get("job_field")
+    target_language_query = request.GET.get("target_language")
+    source_language_query = request.GET.get("target_language")
 
     if job_field_query != "" and job_field_query is not None:
         available_jobs = available_jobs.filter(job_field__icontains=job_field_query)
@@ -30,18 +30,23 @@ def home(request):
             Q(target_language__icontains=target_language_query)
             | Q(source_language__icontains=source_language_query)
         )
-    else:
+    elif (
+        target_language_query != ""
+        and target_language_query is not None
+        and job_field_query != ""
+        and job_field_query is not None
+    ):
         available_jobs = available_jobs.filter(
             Q(job_field__icontains=job_field_query)
             | Q(target_language__icontains=target_language_query)
             | Q(source_language__icontains=source_language_query)
-        )
+        ).distinct()
 
     context = {
         "translators": translators,
         "available_jobs": available_jobs,
         "user": user,
-        "filter_form": filter_form,
+        "job_fields": job_fields,
     }
 
     return render(request, "app/home.html", context)
