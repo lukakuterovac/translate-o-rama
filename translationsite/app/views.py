@@ -1,6 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+<<<<<<< HEAD
+=======
+from .models import Job
+>>>>>>> u8-job-status
 from .forms import JobForm, EmailChangeForm
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -8,9 +12,15 @@ from django.shortcuts import redirect
 from .forms import SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
+<<<<<<< HEAD
 from .models import Job, Message, JobBid
 from .forms import JobForm, MessageForm, JobBidForm
 from django.db.models import Q
+=======
+from .models import Job, Message
+from .forms import JobForm
+from django.contrib.auth.models import User
+>>>>>>> u8-job-status
 
 
 def home(request):
@@ -145,6 +155,7 @@ def post_job(request):
     return render(request, "app/post_job.html", {"form": form})
 
 
+<<<<<<< HEAD
 def jobs(request):
     user = request.user
     jobs = Job.objects.all().filter(
@@ -201,3 +212,11 @@ def message_user(request, job_id):
         form = MessageForm()
         context = {"user": user, "job": job, "form": form}
     return render(request, "app/message_page.html", context)
+=======
+def job_status(request, job_id):
+    job = get_object_or_404(Job, pk=job_id)
+    context = {
+        "job": job,
+    }
+    return render(request, "app/job_status.html", context)
+>>>>>>> u8-job-status
