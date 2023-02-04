@@ -20,4 +20,9 @@ urlpatterns = [
     path("profile/password_change", views.change_password, name="new_password"),
     path("profile/email_change", views.email_change, name="new_email"),
     path("dashboard/job_status/<int:job_id>", views.job_status, name="job_status"),
+    path(
+        "dashboard/job_status/<int:job_id>/rate/<int:rating>",
+        views.job_rating,
+        name="job_rating",
+    ),
 ]

@@ -12,7 +12,7 @@ from django.template import RequestContext
 from .models import Job, Message, JobBid
 from .forms import JobForm, MessageForm, JobBidForm
 from django.db.models import Q
-from .models import Job, Message
+from .models import Job, Message, Rating
 from .forms import JobForm
 from django.contrib.auth.models import User
 
@@ -209,7 +209,16 @@ def message_user(request, job_id):
 
 def job_status(request, job_id):
     job = get_object_or_404(Job, pk=job_id)
+    rating = Rating.objects.filter(job=job).first()
     context = {
         "job": job,
+        "rating": rating.rating if rating else 0,
     }
     return render(request, "app/job_status.html", context)
+
+
+def job_rating(request, job_id, rating):
+    job = get_object_or_404(Job, pk=job_id)
+    Rating.objects.filter(job=job).delete()
+    Rating.objects.create(job=job, translator=job.translator, rating=rating).save()
+    return HttpResponseRedirect(reverse("app:job_status", args=[job_id]))
