@@ -82,7 +82,6 @@ class Job(models.Model):
     text = models.TextField(blank=False)
     is_assigned = models.BooleanField(default=False)
     is_completed = models.BooleanField(default=False)
-<<<<<<< HEAD
 
     translator = models.ForeignKey(
         User,
@@ -91,8 +90,6 @@ class Job(models.Model):
         null=True,
         related_name="set_as_translator_of_job",
     )
-=======
->>>>>>> u8-job-status
 
     def __str__(self):
         return f"{self.id}-{self.title[:30]}-{self.description[:100]}-{self.source_language[:15]}-{self.target_language[:15]}-{self.job_field}-{self.budget}-{self.text}"
