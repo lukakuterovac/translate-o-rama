@@ -13,6 +13,9 @@ from .models import Job, Message, JobBid
 from .forms import JobForm, JobBidForm, MessageForm
 from django.contrib.auth.models import User
 from django.db.models import Q
+from .forms import JobForm, MessageForm, JobBidForm, DisputeJobForm
+from django.db.models import Q
+from django.contrib.auth.models import User
 
 
 def home(request):
@@ -30,11 +33,21 @@ def dashboard(request):
         for bid in temp:
             if bid.job == job:
                 bids.append(bid)
+
+    translators_bid = JobBid.objects.filter(Q(bid_user=user))
+    assigned_jobs = Job.objects.filter(
+        Q(translator=user), Q(is_assigned=True)
+    )  # jobs that are not from user
+    completed_jobs = Job.objects.filter(Q(translator=user), Q(is_completed=True))
+
     context = {
         "user": user,
         "jobs": jobs,
         "messages": messages,
         "bids": bids,
+        "translator_bids": translators_bid,
+        "assigned_jobs": assigned_jobs,
+        "completed_jobs": completed_jobs,
     }
     return render(request, "app/dashboard.html", context)
 
@@ -44,17 +57,35 @@ def profile(request, user_id):
     user_from_job = User.objects.get(pk=user_id)
     email_form = EmailChangeForm(user)
     password_form = SetPasswordForm(user)
+    accepted_jobs = Job.objects.filter(
+        Q(user=user_from_job), Q(is_assigned=True)
+    )  # jobs that are from user
+    completed_jobs = Job.objects.filter(Q(user=user_from_job), Q(is_completed=True))
+
+    translators_bid = JobBid.objects.filter(Q(bid_user=user_from_job))
+    translator_assigned_jobs = Job.objects.filter(
+        Q(translator=user_from_job), Q(is_assigned=True)
+    )  # jobs that are NOT from user
+    translator_completed_jobs = Job.objects.filter(
+        Q(translator=user_from_job), Q(is_completed=True)
+    )
+
     context = {
         "user": user,
         "user_from_jobs": user_from_job,
         "email_form": email_form,
         "password_form": password_form,
+        "accepted_jobs": accepted_jobs,
+        "completed_jobs": completed_jobs,
+        "translator_bids": translators_bid,
+        "translator_assigned_jobs": translator_assigned_jobs,
+        "translator_completed_jobs": translator_completed_jobs,
     }
     return render(request, "app/profile.html", context)
 
 
 @login_required()
-def email_change(request):
+def email_change(request, user_id):
     user = request.user
     form = EmailChangeForm(user)
 
@@ -70,21 +101,16 @@ def email_change(request):
                 "password_form": password_form,
             }
 
-            return HttpResponseRedirect(reverse("app:profile", args=[]))
-        else:
-            context = {"user": user, "email_form": form, "password_form": password_form}
-            return render(request, "app/profile.html", context)
+        return HttpResponseRedirect(reverse("app:profile", args=[user_id]))
     else:
-        return render(
-            request,
-            "app/profile.html",
-            {"email_form": form},
-            context_instance=RequestContext(request),
-        )
+        context = {"user": user, "email_form": form, "password_form": password_form}
+        return render(request, "app/profile.html", context)
 
 
-def change_password(request):
+@login_required()
+def change_password(request, user_id):
     user = request.user
+    email_form = EmailChangeForm(user)
     if request.method == "POST":
         form = SetPasswordForm(user, request.POST)
         if form.is_valid():
@@ -94,11 +120,12 @@ def change_password(request):
         else:
             for error in list(form.errors.values()):
                 messages.error(request, error)
-        context = {"user": user, "form": form}
-        return HttpResponseRedirect(request, "app/profile.html", context)
+        context = {"user": user, "form": form, "email_form": email_form}
+        return HttpResponseRedirect(reverse("app:profile", args=[user_id]))
     else:
         form = SetPasswordForm(user)
-        context = {"user": user, "form": form}
+
+        context = {"user": user, "form": form, "email_form": email_form}
         return render(request, "app/profile.html", context)
 
 
@@ -125,7 +152,9 @@ def post_job(request):
 
 def jobs(request):
     user = request.user
-    jobs = Job.objects.all().filter(~Q(user=user), Q(is_assigned=False))
+    jobs = Job.objects.all().filter(
+        ~Q(user=user), Q(is_assigned=False), Q(is_completed=False)
+    )
 
     context = {
         "user": user,
@@ -186,3 +215,44 @@ def assign_job(request, bid_id):
     job.is_assigned = True
     job.save()
     return HttpResponseRedirect(reverse("app:dashboard", args=[]))
+
+
+def job_status(request, job_id):
+    job = get_object_or_404(Job, pk=job_id)
+    context = {
+        "job": job,
+    }
+    return render(request, "app/job_status.html", context)
+
+
+def dispute_job(request, job_id):
+    user = request.user
+    job = get_object_or_404(Job, pk=job_id)
+    form = DisputeJobForm(instance=job)
+
+    context = {
+        "job": job,
+        "user": user,
+        "form": form,
+    }
+
+    if request.method == "POST":
+        form = DisputeJobForm(request.POST, instance=job)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("app:dashboard", args=[]))
+        else:
+            context = {
+                "job": job,
+                "user": user,
+                "form": form,
+            }
+            return render(request, "app/dispute_job.html", context)
+    else:
+        form = DisputeJobForm(instance=job)
+        context = {
+            "job": job,
+            "user": user,
+            "form": form,
+        }
+    return render(request, "app/dispute_job.html", context)

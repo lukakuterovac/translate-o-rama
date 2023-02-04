@@ -17,27 +17,24 @@
   <div class="mb-5">
     {% for job in jobs %}
       {% include 'includes/job_card.html' with job=job %}
-      {% if job.is_assigned %}
-        <div class="row my-3 ms-2">  
-          <h5 class="col-4 d-block">Assigned to: <a href="#">{{ job.assigned_to.bid_user.username }}</a> for {{ job.assigned_to.bid }} token(s)</h5>
-        </div>
-      {% else %}
-        {% for bid in bids %}
-          {% if bid.job == job %}
-            <div class="row my-3 ms-2">
-              <h5 class="col-4 d-block"><a href="#">{{ bid.bid_user }}</a>: {{ bid.bid }} token(s)</h5>
-              <form action="{% url 'app:assign_job' bid.id %}" class="col-3" method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary col-3">Assign</button>
-              </form>
-            </div>
-          {% endif %}
-        {% endfor %}
+      {% for bid in bids %}
+        {% if bid.job == job %}
+          <div class="row my-3">
+            <h5 class="col-3 d-block"><a href="#">{{ bid.bid_user }}</a>: {{ bid.bid }}</h5>
+            <button type="button" class="btn btn-primary col-1 ms-5" href="{% url 'app:assign_job' bid.id %}">Assign</button>
+            
+          </div>
+        {% endif %} 
+      {% endfor %}
+      {% if job.is_completed %}
+          <a href="{% url 'app:dispute_job' job.id %}" class="btn btn-primary  mx-auto">Dispute</a>
+      
       {% endif %}
     {% empty %}
       <div class="row">
         No jobs posted.
       </div>
+      
     {% endfor %}
   </div>
   
@@ -59,4 +56,24 @@
       </div>
     {% endfor %}
   </div>
+
+
+  {% if user.userprofile.is_translator %}
+    <h2 class="text-center mt-5 mb-4">Submitted bids</h2>
+    {% for bid in translator_bids %}
+      {% include 'includes/bid_form.html' with job_bid=bid %}
+    {% endfor %}
+
+    <h2 class="text-center mt-5 mb-4">Assigned jobs</h2>
+    {% for a_job in assigned_jobs %}
+      {% include 'includes/job_card.html' with job=a_job %}
+    {% endfor %}
+
+    <!--Jobs that he ended-->
+    <h2 class="text-center mt-5 mb-4">Completed jobs</h2>
+    {% for c_job in completed_jobs %}
+      {% include 'includes/job_card.html' with job=c_job %}
+    {% endfor %}
+
+  {% endif %}
 {% endblock content %}

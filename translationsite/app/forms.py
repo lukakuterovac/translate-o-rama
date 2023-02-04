@@ -1,10 +1,27 @@
 from django.forms import ModelForm
-from .models import Job, JobBid, Message
+from .models import Job, JobBid, Message, UserProfile
 from django.contrib.auth.forms import SetPasswordForm, UserChangeForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from .models import Job, UserProfile
 from django import forms
+
+
+class UserProfileForm(ModelForm):
+    is_translator = forms.BooleanField()
+
+    class Meta:
+        model = UserProfile
+        fields = [
+            "token_balance",
+            "is_translator",
+        ]
+
+        widgets = {
+            "token_balance": forms.NumberInput(attrs={"class": "form-control"}),
+            "is_translator": forms.CheckboxInput(attrs={"class": "form-control"}),
+        }
 
 
 class JobForm(ModelForm):
@@ -151,3 +168,24 @@ class MessageForm(ModelForm):
         fields = [
             "text",
         ]
+
+
+class DisputeJobForm(ModelForm):
+    class Meta:
+        model = Job
+        fields = [
+            "dispute",
+        ]
+
+    def clean(self):
+        if "dispute" in self.cleaned_data:
+            if self.cleaned_data["dispute"] == "":
+                raise ValidationError("You have to fill in this field!")
+        return self.cleaned_data
+
+    def save(self, commit=True):
+        dispute = self.cleaned_data["dispute"]
+        self.instance.dispute = dispute
+        if commit:
+            self.instance.save()
+        return self.instance

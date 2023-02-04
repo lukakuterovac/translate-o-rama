@@ -6,19 +6,24 @@ from django import forms
 from django.forms import ModelForm
 import datetime
 
+
 # Create your models here.
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     token_balance = models.DecimalField(default=0.0, max_digits=5, decimal_places=2)
+    is_translator = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"{self.user.username}: {self.token_balance}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        profile, created = UserProfile.objects.get_or_create(user=instance)
+        UserProfile.objects.create(user=instance)
 
 
 @receiver(post_save, sender=User)
@@ -57,7 +62,7 @@ class JobField(models.Model):
 
 
 class Job(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
     title = models.TextField(blank=False, unique=True)
     description = models.TextField(blank=False)
     source_language = models.TextField(blank=False)
@@ -78,6 +83,16 @@ class Job(models.Model):
     )
     is_assigned = models.BooleanField(default=False)
     is_completed = models.BooleanField(default=False)
+
+    translator = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="set_as_translator_of_job",
+    )
+
+    dispute = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.id}-{self.title[:30]}-{self.description[:100]}-{self.source_language[:15]}-{self.target_language[:15]}-{self.job_field}-{self.budget}-{self.text}"

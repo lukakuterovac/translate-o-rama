@@ -8,9 +8,23 @@
     <h5 class="mb-3"><b>Email address:</b> {{ user_from_jobs.email }}</h5>
 
     <h5 class="mb-3"><b>Accepted jobs:</b></h5>
+    {% for accepted_job in accepted_jobs %}
+        {% include 'includes/job_card.html' with job=accepted_job %}
+        {% empty %}
+        <p >
+          No jobs posted.
+        </p>
+    {% endfor %}
 
     <h5 class="mb-3"><b>Completed jobs:</b></h5>
-
+    {% for completed_job in completed_jobs %}
+        {% include 'includes/job_card.html' with job=completed_job %}
+        {% empty %}
+        <p >
+          No jobs posted.
+        </p>
+    {% endfor %}
+    
     {% if user.id == user_from_jobs.id %}
         <div class="form-group">
             {% block email_new %}
@@ -22,5 +36,24 @@
                 {% include 'app/password_change.html' with form=password_form %}
             {% endblock%}
         </div>
+    {% endif %}
+
+    {% if user.userprofile.is_translator %}
+        <h2 class="text-center mt-5 mb-4">Submitted bids</h2>
+        {% for bid in translator_bids %}
+            {% include 'includes/bid_form.html' with job_bid=bid %}
+        {% endfor %}
+
+        <h2 class="text-center mt-5 mb-4">Assigned jobs</h2>
+        {% for a_job in translator_assigned_jobs %}
+            {% include 'includes/job_card.html' with job=a_job %}
+        {% endfor %}
+
+        <!--Jobs that he ended-->
+        <h2 class="text-center mt-5 mb-4">Completed jobs</h2>
+        {% for c_job in translator_completed_jobs %}
+            {% include 'includes/job_card.html' with job=c_job %}
+        {% endfor %}
+
     {% endif %}
 {% endblock %}
