@@ -45,18 +45,20 @@
       </h4>
       <div class="mb-2 text-muted">Budget: {{ job.budget }} token(s)</div>
       <div class="">{{ job.description }}</div>
-      <ul class="btn btn-light list-inline rating-list">
-        <a href="{% url 'app:job_rating' job.id 5 %}"><li>
-            <i class="bi bi-star-fill {% if rating > 4 %} checked {% endif %}" title="Rate 5"></i></li></a>
-        <a href="{% url 'app:job_rating' job.id 4 %}"><li>
-            <i class="bi bi-star-fill {% if rating > 3 %} checked {% endif %}" title="Rate 4"></i></li></a>
-        <a href="{% url 'app:job_rating' job.id 3 %}"><li>
-            <i class="bi bi-star-fill {% if rating > 2 %} checked {% endif %}" title="Rate 3"></i></li></a>
-        <a href="{% url 'app:job_rating' job.id 2 %}"><li>
-            <i class="bi bi-star-fill {% if rating > 1 %} checked {% endif %}" title="Rate 2"></i></li></a>
-        <a href="{% url 'app:job_rating' job.id 1 %}"><li>
-            <i class="bi bi-star-fill {% if rating > 0 %} checked {% endif %}" title="Rate 1"></i></li></a>
-      </ul>
+      {% if job.is_completed %}
+        <ul class="btn btn-light list-inline rating-list">
+          <a href="{% url 'app:job_rating' job.id 5 %}"><li>
+              <i class="bi bi-star-fill {% if rating > 4 %} checked {% endif %}" title="Rate 5"></i></li></a>
+          <a href="{% url 'app:job_rating' job.id 4 %}"><li>
+              <i class="bi bi-star-fill {% if rating > 3 %} checked {% endif %}" title="Rate 4"></i></li></a>
+          <a href="{% url 'app:job_rating' job.id 3 %}"><li>
+              <i class="bi bi-star-fill {% if rating > 2 %} checked {% endif %}" title="Rate 3"></i></li></a>
+          <a href="{% url 'app:job_rating' job.id 2 %}"><li>
+              <i class="bi bi-star-fill {% if rating > 1 %} checked {% endif %}" title="Rate 2"></i></li></a>
+          <a href="{% url 'app:job_rating' job.id 1 %}"><li>
+              <i class="bi bi-star-fill {% if rating > 0 %} checked {% endif %}" title="Rate 1"></i></li></a>
+        </ul>
+      {% endif %}
       <a href="{% url 'app:dashboard' %}" class="btn btn-secondary col-2 mt-4">Back</a>
     </div>
   </body>
