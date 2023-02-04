@@ -27,8 +27,8 @@
         {% endif %} 
       {% endfor %}
       {% if job.is_completed %}
-          <a href="{% url 'app:dispute_job' job.id %}" class="btn btn-primary  mx-auto">Dispute</a>
-          <a href="{% url 'app:view_translation' job.id %}" class="btn btn-primary  mx-2">View translation</a>
+          <a href="{% url 'app:dispute_job' job.id %}" class="btn btn-primary mx-auto">Dispute</a>
+          <a href="{% url 'app:view_translation' job.id %}" class="btn btn-primary mx-2">View translation</a>
       {% endif %}
     {% empty %}
       <div class="row">
