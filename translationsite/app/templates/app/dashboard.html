@@ -28,7 +28,9 @@
             {% else %}
               <a href="{% url 'app:dispute_job' job.id %}" class="btn btn-primary ms-5">Dispute</a>
             {% endif %}
+            
           {% endfor %}
+          <a href="{% url 'app:view_translation' job.id %}" class="btn btn-primary mx-2">View translation</a>
         {% endif %}
 
       {% else %}
@@ -44,13 +46,11 @@
             </div>
           {% endif %} 
         {% endfor %}
-
       {% endif %}
-    {% empty %}
+      {% empty %}
       <div class="row">
         No jobs posted.
       </div>
-      
     {% endfor %}
   </div>
   

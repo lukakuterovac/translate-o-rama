@@ -36,4 +36,9 @@ urlpatterns = [
         views.job_rating,
         name="job_rating",
     ),
+    path(
+        "dashboard/translation/<int:job_id>",
+        views.view_translation,
+        name="view_translation",
+    ),
 ]
