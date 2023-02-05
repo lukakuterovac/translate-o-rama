@@ -161,4 +161,4 @@ class Dispute(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.id}-{self.job.title[:30]}-{self.job.user.username[:20]}-{self.status}"
+        return f"{self.id}-{self.job.title[:40]}-{self.job.user.username[:20]}/{self.job.translator.username[:20]}-{self.status}"

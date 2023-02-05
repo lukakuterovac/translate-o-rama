@@ -338,9 +338,6 @@ def dispute_job(request, job_id):
             return HttpResponseRedirect(reverse("app:dashboard", args=[]))
 
         else:
-            if dispute_for_job and request.method == "POST":
-                return HttpResponseRedirect(reverse("app:dashboard", args=[]))
-
             context = {
                 "job": job,
                 "user": user,
