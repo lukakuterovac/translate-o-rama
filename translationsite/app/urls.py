@@ -24,7 +24,11 @@ urlpatterns = [
     ),
     path("dashboard/accept/<int:bid_id>", views.accept_job, name="accept_job"),
     path("dashboard/job_status/<int:job_id>", views.job_status, name="job_status"),
-    path("dashboard/dispute/<int:job_id>", views.dispute_job, name="dispute_job"),
+    path(
+        "dashboard/dispute/<int:job_id>",
+        views.dispute_job,
+        name="dispute_job",
+    ),
     path("profile/password_change", views.change_password, name="new_password"),
     path("profile/email_change", views.email_change, name="new_email"),
     path(

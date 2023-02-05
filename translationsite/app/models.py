@@ -139,3 +139,25 @@ class Rating(models.Model):
 
     def __str__(self) -> str:
         return f"{self.id} {self.job.title},{self.translator.username}: {self.rating}"
+
+
+class DisputeStatus(models.Model):
+    OPEN = "Open"
+    CLOSED = "Closed"
+
+    DISPUTE_CHOICES = [
+        (OPEN, "Open"),
+        (CLOSED, "Closed"),
+    ]
+
+
+class Dispute(models.Model):
+    job = models.ForeignKey(
+        Job, on_delete=models.CASCADE, related_name="job_with_dispute"
+    )
+    status = models.CharField(
+        max_length=6, choices=DisputeStatus.DISPUTE_CHOICES, default=DisputeStatus.OPEN
+    )
+
+    def __str__(self) -> str:
+        return f"{self.id}-{self.job.title[:30]}-{self.job.user.username[:20]}-{self.status}"
