@@ -22,6 +22,7 @@
       {% if job.is_assigned %}
         <span class="ms-5">Assigned to <a href="{% url 'app:profile' job.assigned_to.bid_user.id %}">{{ job.assigned_to.bid_user.username }}</a></span>
         {% if job.is_completed %}
+          <a href="{% url 'app:job_review' job.id %}" class="btn btn-primary mx-2">Review</a>
           {% for dispute in disputes %}
             {% if dispute.status == "Closed" and dispute.job == job %}
               <span class="ms-5">Dispute closed</span>

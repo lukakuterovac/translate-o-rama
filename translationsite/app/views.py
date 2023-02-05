@@ -303,10 +303,8 @@ def accept_job(request, bid_id):
 
 def job_status(request, job_id):
     job = get_object_or_404(Job, pk=job_id)
-    rating = Rating.objects.filter(job=job).first()
     context = {
         "job": job,
-        "rating": rating.rating if rating else 0,
     }
     return render(request, "app/job_status.html", context)
 
@@ -363,12 +361,15 @@ def job_rating(request, job_id, new_rating):
     job = get_object_or_404(Job, pk=job_id)
     translator = job.translator
     rating = Rating.objects.filter(job=job).first()
+
     if rating:
         rating.rating = new_rating
         rating.save()
+
     else:
         Rating.objects.create(job=job, translator=translator, rating=new_rating)
-    return HttpResponseRedirect(reverse("app:job_status", args=[job_id]))
+
+    return HttpResponseRedirect(reverse("app:job_review", args=[job_id]))
 
 
 def view_translation(request, job_id):
@@ -377,3 +378,13 @@ def view_translation(request, job_id):
         "job": job,
     }
     return render(request, "app/view_translation.html", context)
+
+
+def job_review(request, job_id):
+    job = get_object_or_404(Job, pk=job_id)
+    rating = Rating.objects.filter(job=job).first()
+    context = {
+        "job": job,
+        "rating": rating.rating if rating else 0,
+    }
+    return render(request, "app/review.html", context)

@@ -32,7 +32,7 @@ urlpatterns = [
     path("profile/password_change", views.change_password, name="new_password"),
     path("profile/email_change", views.email_change, name="new_email"),
     path(
-        "dashboard/job_status/<int:job_id>/rate/<int:new_rating>",
+        "dashboard/job_review/<int:job_id>/rate/<int:new_rating>",
         views.job_rating,
         name="job_rating",
     ),
@@ -41,4 +41,5 @@ urlpatterns = [
         views.view_translation,
         name="view_translation",
     ),
+    path("dashboard/job_review/<int:job_id>", views.job_review, name="job_review"),
 ]
