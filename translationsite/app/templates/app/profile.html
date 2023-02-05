@@ -84,6 +84,7 @@
         {% for job in translator_assigned_jobs %}
             {% include 'includes/job_card.html' with job=job %}
             <!--za complete btn-->
+            {% if user.id == job.translator.id %}
             <form action="{% url 'app:complete_job' user.id job.id %}">
                 {% csrf_token %}
                 <div class="row mt-4 text-center mb-5">
@@ -92,6 +93,7 @@
                     </div>
                 </div>
             </form>
+            {% endif %}
         {% endfor %}
         
         <!--Jobs that he ended-->

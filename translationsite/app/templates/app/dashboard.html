@@ -83,6 +83,14 @@
     <h2 class="text-center mt-5 mb-4">Assigned jobs</h2>
     {% for a_job in assigned_jobs %}
       {% include 'includes/job_card.html' with job=a_job %}
+      <form action="{% url 'app:complete_job' user.id a_job.id %}">
+        {% csrf_token %}
+        <div class="row mt-4 text-center mb-5">
+            <div clss="col-md-8 ms-2">
+                <input type="submit" value="Complete" class="custom-btn btn px-4 py-2">
+            </div>
+        </div>
+    </form>
     {% endfor %}
 
     <!--Jobs that he ended-->
