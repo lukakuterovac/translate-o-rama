@@ -20,9 +20,15 @@
       <a href="{% url 'app:job_status' job.id %}" class="btn btn-primary col-2">View status</a>
       
       {% if job.is_assigned %}
-        Assigned to <a href="{% url 'app:profile' job.assigned_to.bid_user.id %}">{{ job.assigned_to.bid_user.username }}</a>
+        <span class="ms-5">Assigned to <a href="{% url 'app:profile' job.assigned_to.bid_user.id %}">{{ job.assigned_to.bid_user.username }}</a></span>
         {% if job.is_completed %}
-          <a href="{% url 'app:dispute_job' job.id %}" class="btn btn-primary mx-auto">Dispute</a>
+          {% for dispute in disputes %}
+            {% if dispute.status == "Closed" and dispute.job == job %}
+              <span class="ms-5">Dispute closed</span>
+            {% else %}
+              <a href="{% url 'app:dispute_job' job.id %}" class="btn btn-primary ms-5">Dispute</a>
+            {% endif %}
+          {% endfor %}
         {% endif %}
 
       {% else %}

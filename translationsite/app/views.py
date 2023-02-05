@@ -39,7 +39,7 @@ def dashboard(request):
         Q(translator=user), Q(is_assigned=True)
     )  # jobs that are not from user
     completed_jobs = Job.objects.filter(Q(translator=user), Q(is_completed=True))
-
+    disputes = Dispute.objects.all()
     context = {
         "user": user,
         "jobs": jobs,
@@ -48,6 +48,7 @@ def dashboard(request):
         "translator_bids": translators_bid,
         "assigned_jobs": assigned_jobs,
         "completed_jobs": completed_jobs,
+        "disputes": disputes,
     }
     return render(request, "app/dashboard.html", context)
 
