@@ -32,3 +32,8 @@ nav {
 .logo {
     max-height: 35px;
 }
+
+.design-color {
+    background-color: rgb(117 190 218 / 0.5);
+    /* 50% transparent */
+}

@@ -1,6 +1,8 @@
 {% extends 'app/base.html' %}
 {% block content %}
-        <h3 class="text-center mt-3">Translators</h3>
+        
+        
+        <h1 class="text-center mt-3">Translators</h3>
         {% for translator in translators %}
                 {% include 'includes/user_card.html' with user=translator %}
                 {% empty %}
@@ -8,9 +10,10 @@
                 No translators.
                 </div>
         {% endfor %}
-        <h3 class="text-center mt-5">Available jobs</h3>
+        
+        <h1 class="text-center mt-5">Available jobs</h3>
 
-        <div class="row mx-auto mt-5">
+        <div class="row mx-auto mt-5 pt-5 pb-3 bg-light">
                        
             <form method="GET" action="{% url 'home_path' %}">
                  
