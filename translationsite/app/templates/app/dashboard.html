@@ -38,7 +38,7 @@
         {% for bid in bids %}
           {% if bid.job == job %}
             <div class="row my-3">
-              <h5 class="col-3 d-block"><a href="#">{{ bid.bid_user }}</a>: {{ bid.bid }}</h5>
+              <h5 class="col-3 d-block"><a href="{% url 'app:profile' bid.bid_user.id %}">{{ bid.bid_user }}</a>: {{ bid.bid }}</h5>
               <form action="{% url 'app:accept_job' bid.id %}" class="col-3" method="post">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-primary col-3">Accept</button>

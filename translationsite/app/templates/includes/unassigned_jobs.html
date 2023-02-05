@@ -8,6 +8,7 @@
         <div class="card-text mt-1"><b>Job field:</b>  {{ job.job_field }}</div>
         <p class="card-text mt-1"><b>Budget:</b>  {{ job.budget }} token(s)</p>
         <p class="card-text mt-1"><a href="{% url 'app:profile' job.user.id %}">User's profile</a></p>
+        
         {% if user.userprofile.is_translator %}
         <div class="row">
            
@@ -21,6 +22,12 @@
             </form>
             <div class="col-6"></div>
         </div>
+        {% else %}
+        <form action="{% url 'app:message_user' job.id %}" method="POST" class="col-2">
+            {% csrf_token %}
+            <button type="submit" class="btn custom-btn">Message User</a>
+        </form>
         {% endif %}
+
     </div>
   </div>
