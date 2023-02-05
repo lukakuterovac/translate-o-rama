@@ -82,7 +82,7 @@ def dashboard(request):
 
     translators_bid = JobBid.objects.filter(Q(bid_user=user))
     assigned_jobs = Job.objects.filter(
-        Q(translator=user), Q(is_assigned=True)
+        Q(translator=user), Q(is_assigned=True), Q(is_completed=False)
     )  # jobs that are not from user
     completed_jobs = Job.objects.filter(Q(translator=user), Q(is_completed=True))
     disputes = Dispute.objects.all()
@@ -114,7 +114,7 @@ def profile(request, user_id):
 
     translators_bid = JobBid.objects.filter(Q(bid_user=user_from_job))
     translator_assigned_jobs = Job.objects.filter(
-        Q(translator=user_from_job), Q(is_assigned=True)
+        Q(translator=user_from_job), Q(is_assigned=True), Q(is_completed=False)
     )  # jobs that are NOT from user
     translator_completed_jobs = Job.objects.filter(
         Q(translator=user_from_job), Q(is_completed=True)
@@ -275,6 +275,7 @@ def complete_job(request, user_id, job_id):
     if request.method == "POST":
         form = CompleteJobForm(request.POST, instance=job)
         if form.is_valid():
+            job.is_completed = True
             form.save()
             return HttpResponseRedirect(reverse("app:profile", args=[user_id]))
         else:
