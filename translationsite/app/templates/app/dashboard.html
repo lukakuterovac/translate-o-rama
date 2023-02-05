@@ -1,15 +1,47 @@
 {% extends 'app/base.html' %}
-
 {% block content %}
+
+  <style>
+    .rating-list li {
+      float: right;
+      color: #ddd;
+      padding: 10px 5px;
+    }
+
+    .rating-list li:hover,
+    .rating-list li:hover ~ li {
+      color: orange;
+    }
+
+    .rating-list {
+      display: inline-block;
+      list-style: none;
+    }
+    .checked {
+        color: orange;
+    }
+  </style>
+
+
   <div class="row">
     <div class="col-md-12">
       <h1 class="text-center mt-3 mb-5">Dashboard</h1>
     </div>
   </div>
   
-  <h5 class="mb-3">Username: {{ user.username }}</h5>
-  <h5 class="mb-3">E-mail: {{ user.email }}</h5>
-  <h5 class="mb-3">Token balance: {{ user.userprofile.token_balance }} token(s)</h5>
+  <h5 class="mb-3"><b>Username:</b> {{ user.username }}</h5>
+  <h5 class="mb-3"><b>E-mail:</b> {{ user.email }}</h5>
+  <h5 class="mb-3"><b>Token balance:</b> {{ user.userprofile.token_balance }} token(s)</h5>
+
+  {% if user.userprofile.is_translator %}
+        <h5 class="mb-3"><b>Avg rating:</b>
+            <span class="bi bi-star-fill {% if rating > 0 %} checked {% endif %}"></span>
+            <span class="bi bi-star-fill {% if rating > 1 %} checked {% endif %}"></span>
+            <span class="bi bi-star-fill {% if rating > 2 %} checked {% endif %}"></span>
+            <span class="bi bi-star-fill {% if rating > 3 %} checked {% endif %}" ></span>
+            <span class="bi bi-star-fill {% if rating > 4 %} checked {% endif %}"></span>
+        </h5>
+    {% endif %}
 
 
   <h2 class="text-center mt-5">Jobs</h2>
@@ -101,4 +133,5 @@
     {% endfor %}
 
   {% endif %}
+
 {% endblock content %}

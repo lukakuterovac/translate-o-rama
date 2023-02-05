@@ -86,6 +86,8 @@ def dashboard(request):
     )  # jobs that are not from user
     completed_jobs = Job.objects.filter(Q(translator=user), Q(is_completed=True))
     disputes = Dispute.objects.all()
+    rating = user.userprofile.average_rating()
+
     context = {
         "user": user,
         "jobs": jobs,
@@ -95,6 +97,7 @@ def dashboard(request):
         "assigned_jobs": assigned_jobs,
         "completed_jobs": completed_jobs,
         "disputes": disputes,
+        "rating": rating,
     }
     return render(request, "app/dashboard.html", context)
 

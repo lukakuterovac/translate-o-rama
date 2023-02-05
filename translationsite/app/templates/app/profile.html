@@ -1,12 +1,6 @@
 {% extends 'app/base.html' %}
 {% block content %}
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    <meta charset="UTF-8">
-</head>
-<body>
+
     <style>
         .rating-list li {
           float: right;
@@ -27,6 +21,8 @@
             color: orange;
         }
     </style>
+
+    
     <h1 class="text-center mb-5 mt-3">User profile</h1>
 
     <h5 class="mb-3"><b>Username:</b>{{ user_from_jobs.username }}</h5>
@@ -103,5 +99,5 @@
         {% endfor %}
 
     {% endif %}
-</body>
+
 {% endblock %}
