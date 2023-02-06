@@ -70,6 +70,26 @@ class JobField(models.Model):
     ]
 
 
+class DisputeStatus(models.Model):
+    OPEN = "Open"
+    CLOSED = "Closed"
+
+    DISPUTE_CHOICES = [
+        (OPEN, "Open"),
+        (CLOSED, "Closed"),
+    ]
+
+
+class Dispute(models.Model):
+    dispute_text = models.TextField(blank=True, null=True)
+    status = models.CharField(
+        max_length=6, choices=DisputeStatus.DISPUTE_CHOICES, default=DisputeStatus.OPEN
+    )
+
+    def __str__(self) -> str:
+        return f"{self.id}-{self.dispute_text[:40]}-{self.status}"
+
+
 class Job(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
     title = models.TextField(blank=False, unique=True)
@@ -102,8 +122,13 @@ class Job(models.Model):
     )
 
     translation = models.TextField(blank=True, null=True)
-    dispute = models.TextField(blank=True, null=True)
-    translation = models.TextField(blank=True, null=True)
+    dispute = models.ForeignKey(
+        Dispute,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="dispute_for_completed_job",
+    )
 
     def __str__(self):
         return f"{self.id}-{self.title[:30]}-{self.description[:100]}-{self.source_language[:15]}-{self.target_language[:15]}-{self.job_field}-{self.budget}-{self.text}"
@@ -140,25 +165,3 @@ class Rating(models.Model):
 
     def __str__(self) -> str:
         return f"{self.id} {self.job.title},{self.translator.username}: {self.rating}"
-
-
-class DisputeStatus(models.Model):
-    OPEN = "Open"
-    CLOSED = "Closed"
-
-    DISPUTE_CHOICES = [
-        (OPEN, "Open"),
-        (CLOSED, "Closed"),
-    ]
-
-
-class Dispute(models.Model):
-    job = models.ForeignKey(
-        Job, on_delete=models.CASCADE, related_name="job_with_dispute"
-    )
-    status = models.CharField(
-        max_length=6, choices=DisputeStatus.DISPUTE_CHOICES, default=DisputeStatus.OPEN
-    )
-
-    def __str__(self) -> str:
-        return f"{self.id}-{self.job.title[:40]}-{self.job.user.username[:20]}/{self.job.translator.username[:20]}-{self.status}"
