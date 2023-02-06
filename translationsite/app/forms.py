@@ -4,7 +4,7 @@ from django.contrib.auth.forms import SetPasswordForm, UserChangeForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Job, UserProfile
+from .models import Job, UserProfile, Dispute
 from django import forms
 
 
@@ -200,20 +200,14 @@ class CompleteJobForm(ModelForm):
 
 class DisputeJobForm(ModelForm):
     class Meta:
-        model = Job
+        model = Dispute
         fields = [
-            "dispute",
+            "dispute_text",
         ]
 
-    def clean(self):
-        if "dispute" in self.cleaned_data:
-            if self.cleaned_data["dispute"] == "":
-                raise ValidationError("You have to fill in this field!")
-        return self.cleaned_data
-
     def save(self, commit=True):
-        dispute = self.cleaned_data["dispute"]
-        self.instance.dispute = dispute
+        dispute_text = self.cleaned_data["dispute_text"]
+        self.instance.dispute_text = dispute_text
         if commit:
             self.instance.save()
         return self.instance

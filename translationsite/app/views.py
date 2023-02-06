@@ -316,26 +316,30 @@ def job_status(request, job_id):
 def dispute_job(request, job_id):
     user = request.user
     job = get_object_or_404(Job, pk=job_id)
+    form = DisputeJobForm()
 
-    form = DisputeJobForm(instance=job)
-    disputes = Dispute.objects.all()
     context = {
         "job": job,
         "user": user,
         "form": form,
-        "disputes": disputes,
     }
 
     if request.method == "POST":
-        form = DisputeJobForm(request.POST, instance=job)
-        dispute_for_job = disputes.filter(job=job)
+        form = DisputeJobForm(request.POST, instance=job.dispute)
 
         if form.is_valid():
-            if dispute_for_job == None or dispute_for_job.filter(status="Open"):
-                dispute_for_job = Dispute.objects.update_or_create(
-                    job=job, status=DisputeStatus.OPEN
+            if job.dispute == None:
+                dispute = Dispute.objects.create(
+                    dispute_text=form.cleaned_data.get("dispute_text"),
+                    status=DisputeStatus.OPEN,
                 )
-                form.save()
+                dispute.save()
+                job.dispute = dispute
+                job.save()
+            else:
+                dispute = job.dispute
+                dispute.text = form.cleaned_data.get("dispute_text")
+                dispute.save()
 
             return HttpResponseRedirect(reverse("app:dashboard", args=[]))
 
@@ -344,16 +348,14 @@ def dispute_job(request, job_id):
                 "job": job,
                 "user": user,
                 "form": form,
-                "disputes": disputes,
             }
             return render(request, "app/dispute_job.html", context)
     else:
-        form = DisputeJobForm(instance=job)
+        form = DisputeJobForm(instance=job.dispute)
         context = {
             "job": job,
             "user": user,
             "form": form,
-            "disputes": disputes,
         }
     return render(request, "app/dispute_job.html", context)
 
