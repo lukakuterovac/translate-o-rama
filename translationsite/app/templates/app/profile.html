@@ -73,33 +73,34 @@
     {% endif %}
 
     {% if user.userprofile.is_translator %}
-        <h2 class="text-center mt-5 mb-4">Submitted bids</h2>
-        {% for bid in translator_bids %}
-            {% include 'includes/bid_form.html' with job_bid=bid %}
-        {% endfor %}
+        {% if user_from_jobs == user %}
+            <h2 class="text-center mt-5 mb-4">Submitted bids</h2>
+            {% for bid in translator_bids %}
+                {% include 'includes/bid_form.html' with job_bid=bid %}
+            {% endfor %}
 
-        <h2 class="text-center mt-5 mb-4">Assigned jobs</h2>
-        {% for job in translator_assigned_jobs %}
-            {% include 'includes/job_card.html' with job=job %}
-            <!--za complete btn-->
-            {% if user.id == job.translator.id %}
-            <form action="{% url 'app:complete_job' user.id job.id %}">
-                {% csrf_token %}
-                <div class="row mt-4 text-center mb-5">
-                    <div clss="col-md-8 ms-2">
-                        <input type="submit" value="Complete" class="custom-btn btn px-4 py-2">
+            <h2 class="text-center mt-5 mb-4">Assigned jobs</h2>
+            {% for job in translator_assigned_jobs %}
+                {% include 'includes/job_card.html' with job=job %}
+                <!--za complete btn-->
+                {% if user.id == job.translator.id %}
+                <form action="{% url 'app:complete_job' user.id job.id %}">
+                    {% csrf_token %}
+                    <div class="row mt-4 text-center mb-5">
+                        <div clss="col-md-8 ms-2">
+                            <input type="submit" value="Complete" class="custom-btn btn px-4 py-2">
+                        </div>
                     </div>
-                </div>
-            </form>
-            {% endif %}
-        {% endfor %}
-        
-        <!--Jobs that he ended-->
-        <h2 class="text-center mt-5 mb-4">Completed jobs</h2>
-        {% for c_job in translator_completed_jobs %}
-            {% include 'includes/job_card.html' with job=c_job %}
-        {% endfor %}
-
+                </form>
+                {% endif %}
+            {% endfor %}
+            
+            <!--Jobs that he ended-->
+            <h2 class="text-center mt-5 mb-4">Completed jobs</h2>
+            {% for c_job in translator_completed_jobs %}
+                {% include 'includes/job_card.html' with job=c_job %}
+            {% endfor %}
+        {% endif %}
     {% endif %}
 
 {% endblock %}
