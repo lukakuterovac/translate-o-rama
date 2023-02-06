@@ -58,7 +58,7 @@
     {% endfor %}
     
     {% if user.id == user_from_jobs.id %}
-    <div class="bg-light py-1">
+    <div class="bg-light py-1 my-3">
         <div class="form-group">
             {% block email_new %}
                 {% include 'app/email_change.html' with form=email_form %}

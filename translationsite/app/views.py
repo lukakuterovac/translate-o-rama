@@ -72,7 +72,10 @@ def home(request):
 def dashboard(request):
     user = request.user
     jobs = Job.objects.filter(user=user)
-    messages = Message.objects.filter(to_user=user).order_by("send_date").reverse()
+    messages = (
+        Message.objects.filter(to_user=user)
+        | Message.objects.filter(from_user=user).order_by("send_date").reverse()
+    )
     bids = []
     temp = JobBid.objects.all()
     for job in jobs:

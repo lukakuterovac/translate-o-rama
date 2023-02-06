@@ -86,19 +86,14 @@
     {% endfor %}
   </div>
   
-  <div class="design-color pb-5 card ">
-    <h2 class="text-center mt-5 mb-4">Messages</h2>
+  <div class="design-color pb-5 card  mb-5">
+    <h2 class="text-center mt-5 mb-5">Messages</h2>
     
-    <div class="mb-4 w-75 mx-auto">
+    <div class="mb-4 w-75 mx-auto bg-light">
       {% for message in messages %}
-        <div class="card my-2">
-          <div class="card-body m-2">
-            <h4>{{ message.from_user.username }}</h4>
-            <p>Sent: {{ message.send_date }}</p>
-            <p>{{ message.text }}</p>
-            <a href="{% url 'app:profile' message.from_user.id %}" class="card-link">{{ message.from_user }}'s profile</a>
-          </div>
-        </div>
+      
+          {% include 'includes/message_card.html' with message=message user=user%}
+       
       {% empty %}
         <div class="row">
           No messages.
