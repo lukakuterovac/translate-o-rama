@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .forms import UserSignupForm, UserProfileSignupForm, UserLoginForm
-from django.contrib.auth import login, authenticate
+from .forms import UserSignupForm, UserProfileSignupForm
+from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.urls import reverse_lazy
 
@@ -35,25 +35,4 @@ def register(request):
         request=request,
         template_name="registration/signup.html",
         context=context,
-    )
-
-
-def login(request):
-    if request.method == "POST":
-        form = UserLoginForm(request, data=request.POST)
-        if form.is_valid():
-            email = form.cleaned_data.get("email")
-            password = form.cleaned_data.get("password")
-            user = authenticate(email=email, password=password)
-            if user is not None:
-                login(request, user)
-                messages.info(request, f"You are now logged in.")
-                return redirect("main:homepage")
-            else:
-                messages.error(request, "Invalid email or password.")
-        else:
-            messages.error(request, "Invalid uemail or password.")
-    form = UserLoginForm()
-    return render(
-        request=request, template_name="main/login.html", context={"login_form": form}
     )

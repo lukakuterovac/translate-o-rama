@@ -5,7 +5,7 @@ from django.forms import ModelForm
 from django.forms.widgets import CheckboxInput, Select
 from app.models import UserProfile
 from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm
 
 
 class UserSignupForm(UserCreationForm):
@@ -30,11 +30,3 @@ class UserProfileSignupForm(ModelForm):
         model = UserProfile
         fields = ["is_translator"]
         widgets = {"is_translator": CheckboxInput(attrs={"class": "checkbox-inline"})}
-
-
-class UserLoginForm(AuthenticationForm):
-    email = forms.EmailField(required=True)
-
-    class Meta:
-        model = User
-        fields = ["email", "password"]
