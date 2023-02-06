@@ -58,6 +58,7 @@
     {% endfor %}
     
     {% if user.id == user_from_jobs.id %}
+    <div class="bg-light py-1">
         <div class="form-group">
             {% block email_new %}
                 {% include 'app/email_change.html' with form=email_form %}
@@ -68,6 +69,7 @@
                 {% include 'app/password_change.html' with form=password_form %}
             {% endblock%}
         </div>
+    </div>
     {% endif %}
 
     {% if user.userprofile.is_translator %}
