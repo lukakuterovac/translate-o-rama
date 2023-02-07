@@ -200,6 +200,8 @@ def post_job(request):
                 budget=form.cleaned_data.get("budget"),
                 text=form.cleaned_data.get("text"),
             )
+            user.userprofile.token_balance -= form.cleaned_data.get("budget")
+            user.save()
             return HttpResponseRedirect(reverse("app:post_job", args=[]))
     else:
         form = JobForm()
@@ -278,6 +280,15 @@ def complete_job(request, user_id, job_id):
     if request.method == "POST":
         form = CompleteJobForm(request.POST, instance=job)
         if form.is_valid():
+            bid_amount = job.assigned_to.bid
+            user_return = job.budget - bid_amount
+            post_user = job.user
+            post_user.userprofile.token_balance += user_return
+            post_user.save()
+            translator = job.translator
+            translator.userprofile.token_balance += bid_amount
+            translator.save()
+
             job.is_completed = True
             form.save()
             return HttpResponseRedirect(reverse("app:profile", args=[user_id]))
