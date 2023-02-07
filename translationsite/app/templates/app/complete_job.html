@@ -8,8 +8,10 @@
 	<div class="container w-50 mb-5 justify-content-center">
 		<div class="ms-5">
 			<p><b>Title:</b> {{job.title}}</p>
-			<p><b>Description:</b> {{job.description}}</p>   
+			<p><b>Description:</b> {{job.description}}</p>
+			<p><b>Source language:</b> {{job.source_language}}</p>   
 			<p><b>Text to translate:</b> {{job.text}}</p>   
+			<p><b>Target language:</b> {{job.target_language}}</p>   
 		</div>
 	</div>
 	<form action="{% url 'app:complete_job' user.id job.id %}" method="POST">
