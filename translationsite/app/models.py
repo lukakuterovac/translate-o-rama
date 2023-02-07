@@ -87,7 +87,7 @@ class Dispute(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.id}-{self.dispute_text[:40]}-{self.status}"
+        return f"{self.id}-{self.dispute_text[:20]}-{self.status}"
 
 
 class Job(models.Model):
@@ -131,7 +131,7 @@ class Job(models.Model):
     )
 
     def __str__(self):
-        return f"{self.id}-{self.title[:30]}-{self.description[:100]}-{self.source_language[:15]}-{self.target_language[:15]}-{self.job_field}-{self.budget}-{self.text}"
+        return f"{self.id}-{self.title[:30]}-{self.description[:30]}-{self.source_language[:15]}-{self.target_language[:15]}-{self.job_field}-{self.budget}-{self.text[:20]}"
 
 
 class Message(models.Model):
@@ -146,7 +146,7 @@ class Message(models.Model):
     send_date = models.DateTimeField(default=datetime.datetime.now)
 
     def __str__(self) -> str:
-        return f"{self.from_user.username}->{self.to_user.username}: {self.text}"
+        return f"{self.from_user.username}->{self.to_user.username}: {self.text[:30]}"
 
 
 class JobBid(models.Model):
@@ -155,7 +155,7 @@ class JobBid(models.Model):
     bid = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
 
     def __str__(self) -> str:
-        return f"{self.bid_user} on {self.job.title}: {self.bid} token(s)"
+        return f"{self.bid_user} on {self.job.title[:30]}: {self.bid} token(s)"
 
 
 class Rating(models.Model):
@@ -164,4 +164,6 @@ class Rating(models.Model):
     rating = models.IntegerField(default=0)
 
     def __str__(self) -> str:
-        return f"{self.id} {self.job.title},{self.translator.username}: {self.rating}"
+        return (
+            f"{self.id} {self.job.title[:30]},{self.translator.username}: {self.rating}"
+        )

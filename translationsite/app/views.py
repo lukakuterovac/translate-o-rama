@@ -32,7 +32,10 @@ from django.db.models import Q
 def home(request):
     user = request.user
     translators = UserProfile.objects.filter(Q(is_translator=True))
-    available_jobs = Job.objects.filter(Q(is_assigned=False), Q(is_completed=False))
+    available_jobs = Job.objects.filter(
+        Q(is_assigned=False),
+        Q(is_completed=False),
+    )
     job_fields = JobField.objects.all()
 
     job_field_query = request.GET.get("job_field")
@@ -69,6 +72,7 @@ def home(request):
     return render(request, "app/home.html", context)
 
 
+@login_required()
 def dashboard(request):
     user = request.user
     jobs = Job.objects.filter(user=user)
@@ -105,6 +109,7 @@ def dashboard(request):
     return render(request, "app/dashboard.html", context)
 
 
+@login_required()
 def profile(request, user_id):
     user = request.user
     user_from_job = User.objects.get(pk=user_id)
@@ -184,6 +189,7 @@ def change_password(request, user_id):
         return render(request, "app/profile.html", context)
 
 
+@login_required()
 def post_job(request):
     user = request.user
     form = JobForm(initial={"job_field": "ART"})
@@ -208,6 +214,7 @@ def post_job(request):
     return render(request, "app/post_job.html", {"form": form})
 
 
+@login_required()
 def jobs(request):
     user = request.user
     jobs = Job.objects.all().filter(
@@ -221,6 +228,7 @@ def jobs(request):
     return render(request, "app/jobs.html", context)
 
 
+@login_required()
 def job_bid(request, job_id):
     user = request.user
     form = JobBidForm(user=user, initial={"bid": 0.0})
@@ -243,6 +251,7 @@ def job_bid(request, job_id):
     return render(request, "app/bid.html", context)
 
 
+@login_required()
 def message_user(request, job_id):
     user = request.user
     job = get_object_or_404(Job, pk=job_id)
@@ -266,6 +275,7 @@ def message_user(request, job_id):
     return render(request, "app/message_page.html", context)
 
 
+@login_required()
 def complete_job(request, user_id, job_id):
     user = request.user
     job = get_object_or_404(Job, pk=job_id)

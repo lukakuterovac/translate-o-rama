@@ -50,6 +50,7 @@
         </form>
         </div>
         {% for job in available_jobs %}
+                
                 {% include 'includes/unassigned_jobs.html' with job=job user=user %}
                 {% empty %}
                 <div class="row">
